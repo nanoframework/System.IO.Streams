@@ -47,9 +47,13 @@ namespace System.IO
         /// <summary>
         /// Gets the current character encoding that the current <see cref="StreamReader"/> object is using.
         /// </summary>
-        /// <value>The current character encoding used by the current reader. The value can be different after the first call to any <see cref="Read"/> method of <see cref="StreamReader"/>, since encoding autodetection is not done until the first call to a <see cref="Read"/> method.</value>
+        /// <value>The current character encoding used by the current reader. The value can be different after the first call to any <see cref="Read()"/> method of <see cref="StreamReader"/>, since encoding autodetection is not done until the first call to a <see cref="Read()"/> method.</value>
         public virtual Encoding CurrentEncoding => System.Text.Encoding.UTF8;
 
+        /// <summary>
+        /// Gets a value that indicates whether the current stream position is at the end of the stream.
+        /// </summary>
+        /// <value><see langword="true"/> if the current stream position is at the end of the stream; otherwise <see langword="false"/>.</value>
         public bool EndOfStream
         {
             get
@@ -198,13 +202,12 @@ namespace System.IO
         /// </summary>
         /// <returns>The next character from the input stream represented as an <see cref="int"/> object, or -1 if no more characters are available.</returns>
         /// <remarks>
-        /// This method overrides <see cref="TextReader.Read"/>.
+        /// This method overrides <see cref="TextReader.Read()"/>.
         /// This method returns an integer so that it can return -1 if the end of the stream has been reached. If you manipulate the position of the underlying stream after reading data into the buffer, the position of the underlying stream might not match the position of the internal buffer.To reset the internal buffer, call the DiscardBufferedData method; however, this method slows performance and should be called only when absolutely necessary.
         /// </remarks>
         public override int Read()
         {
             int byteUsed, charUsed;
-            bool completed = false;
 
             while (true)
             {
@@ -270,7 +273,7 @@ namespace System.IO
         /// This method overrides TextReader.Read.
         /// This method returns an integer so that it can return 0 if the end of the stream has been reached.
         /// When using the Read method, it is more efficient to use a buffer that is the same size as the internal buffer of the stream, where the internal buffer is set to your desired block size, and to always read less than the block size.If the size of the internal buffer was unspecified when the stream was constructed, its default size is 4 kilobytes(4096 bytes). If you manipulate the position of the underlying stream after reading data into the buffer, the position of the underlying stream might not match the position of the internal buffer.To reset the internal buffer, call the DiscardBufferedData method; however, this method slows performance and should be called only when absolutely necessary.
-        /// This method returns after either the number of characters specified by the count parameter are read, or the end of the file is reached. <see cref="ReadBlock"/> is a blocking version of <see cref="Read"/>.
+        /// This method returns after either the number of characters specified by the count parameter are read, or the end of the file is reached. <see cref="TextReader.ReadBlock(char[], int, int)"/> is a blocking version of <see cref="Read(char[], int, int)"/>.
         /// </remarks>
         public override int Read(
             char[] buffer,

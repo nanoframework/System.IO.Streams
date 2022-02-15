@@ -144,7 +144,7 @@ namespace System.IO
         /// </summary>
         /// <param name="value"></param>
         /// <remarks>
-        /// This method overrides <see cref="TextWriter.Write"/>.
+        /// This method overrides <see cref="TextWriter.Write(char)"/>.
         /// The specified character is written to the underlying stream unless the end of the stream is reached prematurely.
         /// </remarks>
         public override void Write(char value)
@@ -168,7 +168,7 @@ namespace System.IO
         /// Writes a string to the stream, followed by a line terminator.
         /// </summary>
         /// <remarks>
-        /// This overload is equivalent to the <see cref="TextWriter.Write"/> overload.
+        /// This overload is equivalent to the <see cref="TextWriter.Write(string)"/> overload.
         /// The line terminator is defined by the CoreNewLine field.
         /// This method does not search the specified string for individual newline characters(hexadecimal 0x000a) and replace them with NewLine.
         /// </remarks>

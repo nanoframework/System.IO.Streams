@@ -27,7 +27,7 @@ namespace System.IO
         /// Closes the <see cref="TextReader"/> and releases any system resources associated with the <see cref="TextReader"/>.
         /// </summary>
         /// <remarks>
-        /// This implementation of <see cref="Close"/> calls the <see cref="TextReader.Dispose"/>(Boolean) method and passes it a true value.
+        /// This implementation of <see cref="Close"/> calls the <see cref="TextReader.Dispose(bool)"/> method and passes it a true value.
         /// </remarks>
         public virtual void Close()
         {
@@ -48,8 +48,8 @@ namespace System.IO
         /// </summary>
         /// <param name="disposing"><see langword="true"/> to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         /// <remarks>
-        /// This method is called by the public <see cref="Dispose"/> method and the Finalize method. By default, this method specifies the disposing parameter as <see langword="true"/>. Finalize specifies the disposing parameter as false.
-        /// When the disposing parameter is true, this method releases all resources held by any managed objects that this TextReader references. This method invokes the <see cref="Dispose"/> method of each referenced object.
+        /// This method is called by the public <see cref="Dispose()"/> method and the Finalize method. By default, this method specifies the disposing parameter as <see langword="true"/>. Finalize specifies the disposing parameter as false.
+        /// When the disposing parameter is true, this method releases all resources held by any managed objects that this TextReader references. This method invokes the <see cref="Dispose()"/> method of each referenced object.
         /// </remarks>
         protected virtual void Dispose(bool disposing)
         {
@@ -98,7 +98,7 @@ namespace System.IO
         /// This method returns after either count characters are read or the end of the file is reached. <see cref="ReadBlock"/> is a blocking version of this method.
         /// </para>
         /// <para>
-        /// The <see cref="TextReader"/> class is an abstract class. Therefore, you do not instantiate it in your code.For an example of using the <see cref="Read"/> method, see the StreamReader.Read method.
+        /// The <see cref="TextReader"/> class is an abstract class. Therefore, you do not instantiate it in your code.For an example of using the <see cref="Read(char[], int , int )"/> method, see the StreamReader.Read method.
         /// </para>
         /// </remarks>
         public virtual int Read(char[] buffer, int index, int count)
@@ -118,7 +118,7 @@ namespace System.IO
         /// The position of the underlying text reader is advanced by the number of characters that were read into buffer.
         /// </para>
         /// <para>
-        /// The method blocks until either count characters are read, or all characters have been read.This is a blocking version of <see cref="Read"/>.
+        /// The method blocks until either count characters are read, or all characters have been read.This is a blocking version of <see cref="Read(char[], int, int)"/>.
         /// </para>
         /// </remarks>
         public virtual int ReadBlock(char[] buffer, int index, int count)

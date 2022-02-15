@@ -222,7 +222,7 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Writes the text representation of an object to the text stream by calling the <see cref="ToString"/> method on that object.
+        /// Writes the text representation of an object to the text stream by calling the <see cref="object.ToString"/> method on that object.
         /// </summary>
         /// <param name="value">The object to write.</param>
         public virtual void Write(object value)
@@ -359,7 +359,7 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Writes the text representation of an object to the text stream by calling the <see cref="ToString"/> method on that object, followed by a line terminator.
+        /// Writes the text representation of an object to the text stream by calling the <see cref="object.ToString"/> method on that object, followed by a line terminator.
         /// </summary>
         /// <param name="value">The object to write.</param>
         public virtual void WriteLine(object value)

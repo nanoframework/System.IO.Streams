@@ -54,7 +54,7 @@ namespace System.IO
         /// Initializes a new non-resizable instance of the <see cref="MemoryStream"/> class based on the specified byte array.
         /// </summary>
         /// <param name="buffer">The array of unsigned bytes from which to create the current stream.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="buffer"/> is <see langword="null"/>./exception>
+        /// <exception cref="ArgumentNullException"><paramref name="buffer"/> is <see langword="null"/>.</exception>
         /// <remarks>
         /// <para>
         /// The <see cref="CanRead"/>, <see cref="CanSeek"/>, and <see cref="CanWrite"/> properties are all set to <see langword="true"/>.
