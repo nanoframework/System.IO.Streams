@@ -4,8 +4,6 @@
 // See LICENSE file in the project root for full license information.
 //
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("System.Net.Http, PublicKey=00240000048000009400000006020000002400005253413100040000010001001120aa3e809b3da4f65e1b1f65c0a3a1bf6335c39860ca41acb3c48de278c6b63c5df38239ec1f2e32d58cb897c8c174a5f8e78a9c0b6087d3aef373d7d0f3d9be67700fc2a5a38de1fb71b5b6f6046d841ff35abee2e0b0840a6291a312be184eb311baff5fef0ff6895b9a5f2253aed32fb06b819134f6bb9d531488a87ea2")]
-
 namespace System.IO
 {
     /// <summary>
@@ -14,7 +12,7 @@ namespace System.IO
     public class MemoryStream : Stream
     {
         // Either allocated internally or externally.
-        internal byte[] _buffer;
+        private byte[] _buffer;
         // For user-provided arrays, start at this origin
         private int _origin;
         // read/write head.
@@ -175,6 +173,23 @@ namespace System.IO
         /// <inheritdoc/>
         public override void Flush()
         {
+        }
+
+        /// <summary>
+        /// Returns the array of unsigned bytes from which this stream was created.
+        /// </summary>
+        /// <returns>The byte array from which this stream was created, or the underlying array if a byte array was not provided to the <see cref="MemoryStream"/> constructor during construction of the current instance.</returns>
+        /// <remarks>
+        /// <para>
+        /// Note that the buffer contains allocated bytes which might be unused. For example, if the string "test" is written into the <see cref="MemoryStream"/> object, the length of the buffer returned from <see cref="GetBuffer"/> is 256, not 4, with 252 bytes unused. To obtain only the data in the buffer, use the <see cref="ToArray"/> method; however, <see cref="ToArray"/> creates a copy of the data in memory.
+        /// </para>
+        /// <para>
+        /// The buffer can also be <see langword="null"/>.
+        /// </para>
+        /// </remarks>
+        public virtual byte[] GetBuffer()
+        {
+            return _buffer;
         }
 
         /// <inheritdoc/>
