@@ -11,6 +11,8 @@ namespace System.IO
     /// </summary>
     public class MemoryStream : Stream
     {
+        private const int CapacityDefaultSize = 256;
+
         // Either allocated internally or externally.
         private byte[] _buffer;
         // For user-provided arrays, start at this origin
@@ -41,8 +43,8 @@ namespace System.IO
         /// </remarks>
         public MemoryStream()
         {
-            _buffer = new byte[256];
-            _capacity = 256;
+            _buffer = new byte[CapacityDefaultSize];
+            _capacity = CapacityDefaultSize;
             _expandable = true;
 
             // Must be 0 for byte[]'s created by MemoryStream
@@ -124,52 +126,6 @@ namespace System.IO
             }
         }
 
-        // returns a bool saying whether we allocated a new array.
-        private bool EnsureCapacity(int value)
-        {
-            if (value > _capacity)
-            {
-                int newCapacity = value;
-
-                if (newCapacity < 256)
-                {
-                    newCapacity = 256;
-                }
-
-                if (newCapacity < _capacity * 2)
-                {
-                    newCapacity = _capacity * 2;
-                }
-
-                if (!_expandable && newCapacity > _capacity)
-                {
-                    throw new NotSupportedException();
-                }
-
-                if (newCapacity > 0)
-                {
-                    byte[] newBuffer = new byte[newCapacity];
-
-                    if (_length > 0)
-                    {
-                        Array.Copy(_buffer, 0, newBuffer, 0, _length);
-                    }
-
-                    _buffer = newBuffer;
-                }
-                else
-                {
-                    _buffer = null;
-                }
-
-                _capacity = newCapacity;
-
-                return true;
-            }
-
-            return false;
-        }
-
         /// <inheritdoc/>
         public override void Flush()
         {
@@ -197,34 +153,27 @@ namespace System.IO
         {
             get
             {
-                if (!_isOpen)
-                {
-                    throw new ObjectDisposedException();
-                }
+                EnsureOpen();
 
                 return _length - _origin;
             }
         }
 
         /// <inheritdoc/>
+        ///<exception cref="IOException">Can't adjust position out of the buffer size for fixed size buffer</exception>
+        ///<exception cref="ArgumentOutOfRangeException">Position can't be negative or higher than the stream allocated size.</exception>
         public override long Position
         {
             get
             {
-                if (!_isOpen)
-                {
-                    throw new ObjectDisposedException();
-                }
+                EnsureOpen();
 
                 return _position - _origin;
             }
 
             set
             {
-                if (!_isOpen)
-                {
-                    throw new ObjectDisposedException();
-                }
+                EnsureOpen();
 
                 if (value < 0 || value > MemStreamMaxLength)
                 {
@@ -246,10 +195,7 @@ namespace System.IO
             int offset,
             int count)
         {
-            if (!_isOpen)
-            {
-                throw new ObjectDisposedException();
-            }
+            EnsureOpen();
 
             if (buffer == null)
             {
@@ -288,10 +234,7 @@ namespace System.IO
         /// <exception cref="ObjectDisposedException">The current stream instance is closed.</exception>
         public override int ReadByte()
         {
-            if (!_isOpen)
-            {
-                throw new ObjectDisposedException();
-            }
+            EnsureOpen();
 
             if (_position >= _length)
             {
@@ -314,10 +257,7 @@ namespace System.IO
             long offset,
             SeekOrigin origin)
         {
-            if (!_isOpen)
-            {
-                throw new ObjectDisposedException();
-            }
+            EnsureOpen();
 
             if (offset > MemStreamMaxLength)
             {
@@ -363,10 +303,7 @@ namespace System.IO
         /// <inheritdoc/>
         public override void SetLength(long value)
         {
-            if (!_isOpen)
-            {
-                throw new ObjectDisposedException();
-            }
+            EnsureOpen();
 
             if (value > MemStreamMaxLength || value < 0)
             {
@@ -402,10 +339,7 @@ namespace System.IO
         /// <inheritdoc/>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (!_isOpen)
-            {
-                throw new ObjectDisposedException();
-            }
+            EnsureOpen();
 
             if (buffer == null)
             {
@@ -442,10 +376,7 @@ namespace System.IO
         /// <inheritdoc/>
         public override void WriteByte(byte value)
         {
-            if (!_isOpen)
-            {
-                throw new ObjectDisposedException();
-            }
+            EnsureOpen();
 
             if (_position >= _capacity)
             {
@@ -460,13 +391,14 @@ namespace System.IO
             }
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Writes this MemoryStream to another stream.
+        /// </summary>
+        /// <param name="stream">Stream to write into.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="stream"/> is <see langword="null"/>.</exception>
         public virtual void WriteTo(Stream stream)
         {
-            if (!_isOpen)
-            {
-                throw new ObjectDisposedException();
-            }
+            EnsureOpen();
 
             if (stream == null)
             {
@@ -474,6 +406,69 @@ namespace System.IO
             }
 
             stream.Write(_buffer, _origin, _length - _origin);
+        }
+
+        /// <summary>
+        /// Check that stream is open.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException"></exception>
+        private void EnsureOpen()
+        {
+            if (!_isOpen)
+            {
+                throw new ObjectDisposedException();
+            }
+        }
+
+        /// <summary>
+        /// Verifies that there is enough capacity in the stream.
+        /// </summary>
+        /// <param name="value">Value for the new capacity.</param>
+        /// <returns><see langword="true"/> if allocation for a new array was successful. <see langword="false"/> otherwise.</returns>
+        /// <exception cref="NotSupportedException"></exception>
+        private bool EnsureCapacity(int value)
+        {
+            if (value > _capacity)
+            {
+                int newCapacity = value;
+
+                if (newCapacity < CapacityDefaultSize)
+                {
+                    newCapacity = CapacityDefaultSize;
+                }
+
+                if (newCapacity < _capacity * 2)
+                {
+                    newCapacity = _capacity * 2;
+                }
+
+                if (!_expandable && newCapacity > _capacity)
+                {
+                    throw new NotSupportedException();
+                }
+
+                if (newCapacity > 0)
+                {
+                    byte[] newBuffer = new byte[newCapacity];
+
+                    if (_length > 0)
+                    {
+                        Array.Copy(_buffer, 0, newBuffer, 0, _length);
+                    }
+
+                    _buffer = newBuffer;
+                }
+                else
+                {
+                    _buffer = null;
+                }
+
+                _capacity = newCapacity;
+
+                return true;
+            }
+
+            return false;
         }
     }
 }
