@@ -184,6 +184,33 @@ namespace System.IO
             }
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ObjectDisposedException">The current stream instance is closed.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="offset"/> or <paramref name="count"/> is negative.</exception>
+        /// <exception cref="ArgumentException"><paramref name="offset"/> subtracted from the buffer length is less than <paramref name="count"/>.</exception>
+        public override int Read(SpanByte buffer)
+        {
+            EnsureOpen();
+
+            int n = _length - _position;
+            
+            if (n > buffer.Length)
+            {
+                n = buffer.Length;
+            }
+
+            if (n <= 0)
+            {
+                return 0;
+            }
+
+            for(int i = 0; i < n; i++)
+            {
+                buffer[i] = _buffer[_position + i];
+            }
+
+            return n;
+        }
 
         /// <inheritdoc/>
         /// <exception cref="ObjectDisposedException">The current stream instance is closed.</exception>
