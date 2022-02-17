@@ -16,7 +16,6 @@ namespace System.IO
         private const string c_NewLine = "\r\n";
         private const int c_BufferSize = 0xFFF;
 
-        private Stream _stream;
         private bool _disposed;
         private byte[] _buffer;
         private int _curBufPos;
@@ -25,7 +24,7 @@ namespace System.IO
         /// Gets the underlying stream that interfaces with a backing store.
         /// </summary>
         /// <value>The stream this <see cref="StreamWriter"/> is writing to.</value>
-        public virtual Stream BaseStream => _stream;
+        public virtual Stream BaseStream { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="Encoding"/> in which the output is written.
@@ -51,7 +50,7 @@ namespace System.IO
                 throw new ArgumentException();
             }
 
-            _stream = stream;
+            BaseStream = stream;
             _buffer = new byte[c_BufferSize];
             _curBufPos = 0;
             _disposed = false;
@@ -80,13 +79,13 @@ namespace System.IO
         /// </remarks>
         protected override void Dispose(bool disposing)
         {
-            if (_stream != null)
+            if (BaseStream != null)
             {
                 if (disposing)
                 {
                     try
                     {
-                        if (_stream.CanWrite)
+                        if (BaseStream.CanWrite)
                         {
                             Flush();
                         }
@@ -95,12 +94,12 @@ namespace System.IO
 
                     try
                     {
-                        _stream.Close();
+                        BaseStream.Close();
                     }
                     catch { }
                 }
 
-                _stream = null;
+                BaseStream = null;
                 _buffer = null;
                 _curBufPos = 0;
             }
@@ -128,7 +127,7 @@ namespace System.IO
             {
                 try
                 {
-                    _stream.Write(_buffer, 0, _curBufPos);
+                    BaseStream.Write(_buffer, 0, _curBufPos);
                 }
                 catch (Exception e)
                 {
@@ -197,10 +196,10 @@ namespace System.IO
                 // directly to stream.
                 try
                 {
-                    _stream.Write(_buffer, 0, _curBufPos);
+                    BaseStream.Write(_buffer, 0, _curBufPos);
                     _curBufPos = 0;
 
-                    _stream.Write(buffer, index, count);
+                    BaseStream.Write(buffer, index, count);
 
                     return;
                 }

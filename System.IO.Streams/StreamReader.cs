@@ -17,8 +17,6 @@ namespace System.IO
         private const int c_MaxReadLineLen = 0xFFFF;
         private const int c_BufferSize = 512;
 
-        private Stream _stream;
-
         // Initialized in constructor by CurrentEncoding scheme.
         // Encoding can be changed by resetting this variable.
         readonly Decoder _decoder;
@@ -42,7 +40,7 @@ namespace System.IO
         /// <remarks>
         /// You use this property to access the underlying stream. The StreamReader class buffers input from the underlying stream when you call one of the Read methods. If you manipulate the position of the underlying stream after reading data into the buffer, the position of the underlying stream might not match the position of the internal buffer. To reset the internal buffer, call the DiscardBufferedData method; however, this method slows performance and should be called only when absolutely necessary. The StreamReader constructors that have the detectEncodingFromByteOrderMarks parameter can change the encoding the first time you read from the StreamReader object.
         /// </remarks>
-        public virtual Stream BaseStream => _stream;
+        public virtual Stream BaseStream { get; private set; }
 
         /// <summary>
         /// Gets the current character encoding that the current <see cref="StreamReader"/> object is using.
@@ -84,7 +82,7 @@ namespace System.IO
             _buffer = new byte[c_BufferSize];
             _curBufPos = 0;
             _curBufLen = 0;
-            _stream = stream;
+            BaseStream = stream;
             _decoder = CurrentEncoding.GetDecoder();
             _disposed = false;
         }
@@ -112,14 +110,14 @@ namespace System.IO
         /// </remarks>
         protected override void Dispose(bool disposing)
         {
-            if (_stream != null)
+            if (BaseStream != null)
             {
                 if (disposing)
                 {
-                    _stream.Close();
+                    BaseStream.Close();
                 }
 
-                _stream = null;
+                BaseStream = null;
                 _buffer = null;
                 _curBufPos = 0;
                 _curBufLen = 0;
@@ -160,16 +158,16 @@ namespace System.IO
                 try
                 {
                     // retry read until response timeout expires
-                    while (_stream.Length > 0 && totRead < _buffer.Length)
+                    while (BaseStream.Length > 0 && totRead < _buffer.Length)
                     {
                         int len = (int)(_buffer.Length - totRead);
 
-                        if (len > _stream.Length)
+                        if (len > BaseStream.Length)
                         {
-                            len = (int)_stream.Length;
+                            len = (int)BaseStream.Length;
                         }
 
-                        len = _stream.Read(_buffer, totRead, len);
+                        len = BaseStream.Read(_buffer, totRead, len);
 
                         if (len <= 0)
                         {
@@ -238,7 +236,7 @@ namespace System.IO
                     int readCount = _buffer.Length;
 
                     // Put it to the maximum of available data and readCount
-                    readCount = readCount > (int)_stream.Length ? (int)_stream.Length : readCount;
+                    readCount = readCount > (int)BaseStream.Length ? (int)BaseStream.Length : readCount;
 
                     if (readCount == 0)
                     {
@@ -421,7 +419,7 @@ namespace System.IO
         {
             char[] result = null;
 
-            if (_stream.CanSeek)
+            if (BaseStream.CanSeek)
             {
                 result = ReadSeekableStream();
             }
@@ -435,7 +433,7 @@ namespace System.IO
 
         private char[] ReadSeekableStream()
         {
-            char[] chars = new char[(int)_stream.Length];
+            char[] chars = new char[(int)BaseStream.Length];
 
             _ = Read(chars, 0, chars.Length);
 
@@ -518,7 +516,7 @@ namespace System.IO
 
                     if (count > spaceLeft) count = spaceLeft;
 
-                    int read = _stream.Read(_buffer, _curBufLen, count);
+                    int read = BaseStream.Read(_buffer, _curBufLen, count);
 
                     if (read == 0) break;
 
