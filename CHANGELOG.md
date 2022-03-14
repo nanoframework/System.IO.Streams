@@ -2,7 +2,16 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.IO.Streams/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.0.0-preview.8...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.0.0-preview.12...HEAD)
+
+**Documentation and other chores:**
+
+- Update 3 NuGet dependencies [\#4](https://github.com/nanoframework/System.IO.Streams/pull/4)
+- Update 1 NuGet dependencies [\#3](https://github.com/nanoframework/System.IO.Streams/pull/3)
+
+## [v1.0.0-preview.12](https://github.com/nanoframework/System.IO.Streams/tree/v1.0.0-preview.12) (2022-02-17)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.0.0-preview.8...v1.0.0-preview.12)
 
 **Implemented enhancements:**
 
