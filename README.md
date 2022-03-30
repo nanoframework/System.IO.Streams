@@ -10,8 +10,7 @@
 
 | Component | Build Status | NuGet Package |
 |:-|---|---|
-| System.IO.Streams | [![Build Status](https://dev.azure.com/nanoframework/System.IO.Streams/_apis/build/status/nanoframework.System.IO.Streams?repoName=nanoframework%2FSystem.IO.Streams&branchName=main)](https://dev.azure.com/nanoframework/System.IO.Streams/_build/latest?definitionId=74&repoName=nanoframework%2FSystem.IO.Streams&branchName=main) | [![NuGet](https://img.shields.io/nuget/v/nanoFramework.System.IO.Streams.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.System.IO.Streams/) |
-| System.IO.Streams (preview) | [![Build Status](https://dev.azure.com/nanoframework/System.IO.Streams/_apis/build/status/nanoframework.System.IO.Streams?repoName=nanoframework%2FSystem.IO.Streams&branchName=develop)](https://dev.azure.com/nanoframework/System.IO.Streams/_build/latest?definitionId=74&repoName=nanoframework%2FSystem.IO.Streams&branchName=develop) | [![NuGet](https://img.shields.io/nuget/vpre/nanoFramework.System.IO.Streams.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.System.IO.Streams/) |
+| System.IO.Streams | [![Build Status](https://dev.azure.com/nanoframework/System.IO.Streams/_apis/build/status/nanoframework.System.IO.Streams?repoName=nanoframework%2FSystem.IO.Streams&branchName=main)](https://dev.azure.com/nanoframework/System.IO.Streams/_build/latest?definitionId=94&repoName=nanoframework%2FSystem.IO.Streams&branchName=main) | [![NuGet](https://img.shields.io/nuget/v/nanoFramework.System.IO.Streams.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.System.IO.Streams/) |
 
 ## Usage examples
 
