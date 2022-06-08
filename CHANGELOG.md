@@ -1,5 +1,26 @@
 # Changelog
 
+## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.IO.Streams/tree/HEAD)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.0.0...HEAD)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#16](https://github.com/nanoframework/System.IO.Streams/pull/16)
+- Update 1 NuGet dependencies [\#15](https://github.com/nanoframework/System.IO.Streams/pull/15)
+- Update 1 NuGet dependencies [\#14](https://github.com/nanoframework/System.IO.Streams/pull/14)
+- Update 1 NuGet dependencies [\#13](https://github.com/nanoframework/System.IO.Streams/pull/13)
+- Update 1 NuGet dependencies [\#12](https://github.com/nanoframework/System.IO.Streams/pull/12)
+- Update 1 NuGet dependencies [\#11](https://github.com/nanoframework/System.IO.Streams/pull/11)
+
+## [v1.0.0](https://github.com/nanoframework/System.IO.Streams/tree/v1.0.0) (2022-03-28)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.0.0-preview.24...v1.0.0)
+
+**Documentation and other chores:**
+
+- release-v1.0.0 [\#10](https://github.com/nanoframework/System.IO.Streams/pull/10)
+
 ## [v1.0.0-preview.24](https://github.com/nanoframework/System.IO.Streams/tree/v1.0.0-preview.24) (2022-03-28)
 
 [Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.0.0-preview.22...v1.0.0-preview.24)
