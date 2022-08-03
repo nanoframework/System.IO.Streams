@@ -16,7 +16,7 @@ namespace System.IO
         // Either allocated internally or externally.
         private byte[] _buffer;
         // For user-provided arrays, start at this origin
-        private int _origin;
+        private readonly int _origin;
         // read/write head.
         private int _position;
         // Number of bytes within the memory stream
@@ -24,7 +24,7 @@ namespace System.IO
         // length of usable portion of buffer for stream
         private int _capacity;
         // User-provided buffers aren't expandable.
-        private bool _expandable;
+        private readonly bool _expandable;
         // Is this stream open or closed?
         private bool _isOpen;
 
