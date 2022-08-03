@@ -205,7 +205,7 @@ namespace System.IO
         /// </remarks>
         public override int Read()
         {
-            int byteUsed, charUsed;
+            int byteUsed;
 
             while (true)
             {
@@ -218,7 +218,7 @@ namespace System.IO
                     1,
                     false,
                     out byteUsed,
-                    out charUsed,
+                    out System.Int32 charUsed,
                     out _);
 
                 _curBufPos += byteUsed;

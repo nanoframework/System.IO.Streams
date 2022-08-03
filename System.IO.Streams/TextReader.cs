@@ -127,7 +127,8 @@ namespace System.IO
 
             do
             {
-                n += (i = Read(buffer, index + n, count - n));
+                i = Read(buffer, index + n, count - n);
+                n += i;
             } while (i > 0 && n < count);
 
             return n;

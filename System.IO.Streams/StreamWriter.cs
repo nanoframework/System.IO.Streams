@@ -90,13 +90,19 @@ namespace System.IO
                             Flush();
                         }
                     }
-                    catch { }
+                    catch
+                    {
+                        // empty on purpose to catch any exceptions during call to Flush
+                    }
 
                     try
                     {
                         BaseStream.Close();
                     }
-                    catch { }
+                    catch
+                    {
+                        // empty on purpose to catch any exceptions during call to Close
+                    }
                 }
 
                 BaseStream = null;

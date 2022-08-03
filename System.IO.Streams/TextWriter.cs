@@ -150,7 +150,7 @@ namespace System.IO
         /// <param name="value">The <see cref="bool"/> value to write.</param>
         public virtual void Write(bool value)
         {
-            Write(value);
+            Write(value.ToString());
         }
 
         /// <summary>
