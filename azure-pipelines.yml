@@ -59,7 +59,7 @@ jobs:
     parameters:
       sonarCloudProject: 'nanoframework_System.IO.Streams'
       runUnitTests: true
-      unitTestRunsettings: '$(System.DefaultWorkingDirectory)\UnitTests\MemoryStreamUnitTests\nano.runsettings'
+      unitTestRunsettings: '$(System.DefaultWorkingDirectory)\.runsettings'
 
 ##############################
 - job: Update_Dependencies

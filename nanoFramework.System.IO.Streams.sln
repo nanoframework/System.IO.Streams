@@ -11,6 +11,7 @@ Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "MemoryStreamUnitTests", "Un
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DAA42459-BABD-422B-9EAB-D98EECCFDDF4}"
 	ProjectSection(SolutionItems) = preProject
+		.runsettings = .runsettings
 		nanoFramework.System.IO.Streams.nuspec = nanoFramework.System.IO.Streams.nuspec
 		NuGet.Config = NuGet.Config
 		version.json = version.json
