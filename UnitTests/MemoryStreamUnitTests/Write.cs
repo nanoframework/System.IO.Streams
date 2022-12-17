@@ -74,7 +74,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
             try
             {
-                Assert.Throws(typeof(ArgumentNullException),
+                Assert.ThrowsException(typeof(ArgumentNullException),
                     () =>
                       {
                           OutputHelper.WriteLine("Write to null buffer");
@@ -84,7 +84,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                 "Expected ArgumentNullException"
                     );
 
-                Assert.Throws(typeof(ArgumentOutOfRangeException),
+                Assert.ThrowsException(typeof(ArgumentOutOfRangeException),
                     () =>
                     {
                         OutputHelper.WriteLine("Write to negative offset");
@@ -94,7 +94,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     );
 
 
-                Assert.Throws(typeof(ArgumentException),
+                Assert.ThrowsException(typeof(ArgumentException),
     () =>
     {
         OutputHelper.WriteLine("Write to out of range offset");
@@ -104,7 +104,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
     "Expected ArgumentException"
     );
 
-                Assert.Throws(typeof(ArgumentOutOfRangeException),
+                Assert.ThrowsException(typeof(ArgumentOutOfRangeException),
        () =>
        {
            OutputHelper.WriteLine("Write negative count");
@@ -117,7 +117,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
        "Expected ArgumentOutOfRangeException");
 
-                Assert.Throws(typeof(ArgumentException),
+                Assert.ThrowsException(typeof(ArgumentException),
             () =>
             {
                 OutputHelper.WriteLine("Write count larger then buffer");
@@ -128,7 +128,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
             "Expected ArgumentException");
 
-                Assert.Throws(typeof(ObjectDisposedException),
+                Assert.ThrowsException(typeof(ObjectDisposedException),
                 () =>
                 {
                     OutputHelper.WriteLine("Write closed stream");
@@ -139,7 +139,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                 "Expected ObjectDisposedException");
 
-                Assert.Throws(typeof(ObjectDisposedException),
+                Assert.ThrowsException(typeof(ObjectDisposedException),
     () =>
 
     {
@@ -174,22 +174,22 @@ namespace Sytem.IO.MemoryStreamUnitTests
                 {
                     OutputHelper.WriteLine("Write 256 bytes of data");
 
-                    Assert.True(TestWrite(ms, 256));
+                    Assert.IsTrue(TestWrite(ms, 256));
 
                     OutputHelper.WriteLine("Write middle of buffer");
-                    Assert.True(TestWrite(ms, 256, 100, 100));
+                    Assert.IsTrue(TestWrite(ms, 256, 100, 100));
 
                     // 1000 - 256 - 100 = 644
                     OutputHelper.WriteLine("Write start of buffer");
-                    Assert.True(TestWrite(ms, 1000, 644, 0));
+                    Assert.IsTrue(TestWrite(ms, 1000, 644, 0));
 
                     OutputHelper.WriteLine("Write end of buffer");
-                    Assert.True(TestWrite(ms, 1000, 900, 100));
+                    Assert.IsTrue(TestWrite(ms, 1000, 900, 100));
 
                     OutputHelper.WriteLine("Rewind and verify all bytes written");
 
                     ms.Seek(0, SeekOrigin.Begin);
-                    Assert.True(MemoryStreamHelper.VerifyRead(ms));
+                    Assert.IsTrue(MemoryStreamHelper.VerifyRead(ms));
 
                     OutputHelper.WriteLine("Verify Read validation with UTF8 string");
                     ms.SetLength(0);
@@ -206,7 +206,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     string testResult = new string(Encoding.UTF8.GetChars(readbuff));
 
-                    Assert.Equal(test, testResult, $"Exepected: {test}, but got: {testResult}");
+                    Assert.AreEqual(test, testResult, $"Exepected: {test}, but got: {testResult}");
                 }
             }
             catch (Exception ex)
@@ -225,18 +225,18 @@ namespace Sytem.IO.MemoryStreamUnitTests
                 using (MemoryStream ms = new MemoryStream(buffer))
                 {
                     OutputHelper.WriteLine("Write 256 bytes of data");
-                    Assert.True(TestWrite(ms, 256, 1024));
+                    Assert.IsTrue(TestWrite(ms, 256, 1024));
 
                     OutputHelper.WriteLine("Write middle of buffer");
-                    Assert.True(TestWrite(ms, 256, 100, 100, 1024));
+                    Assert.IsTrue(TestWrite(ms, 256, 100, 100, 1024));
 
                     // 1000 - 256 - 100 = 644
                     OutputHelper.WriteLine("Write start of buffer");
-                    Assert.True(TestWrite(ms, 1000, 644, 0, 1024));
+                    Assert.IsTrue(TestWrite(ms, 1000, 644, 0, 1024));
 
                     OutputHelper.WriteLine("Write past end of buffer");
 
-                    Assert.Throws(typeof(NotSupportedException),
+                    Assert.ThrowsException(typeof(NotSupportedException),
                         () =>
                         {
                             TestWrite(ms, 50, 1024);
@@ -244,15 +244,15 @@ namespace Sytem.IO.MemoryStreamUnitTests
                         "Expected NotSupportedException");
 
                     OutputHelper.WriteLine("Verify failed Write did not move position");
-                    Assert.Equal(ms.Position, 1000, $"Expected position to be 1000, but it is {ms.Position}");
+                    Assert.AreEqual(ms.Position, 1000, $"Expected position to be 1000, but it is {ms.Position}");
 
                     OutputHelper.WriteLine("Write final 24 bytes of static buffer");
-                    Assert.True(TestWrite(ms, 24));
+                    Assert.IsTrue(TestWrite(ms, 24));
 
                     OutputHelper.WriteLine("Rewind and verify all bytes written");
 
                     ms.Seek(0, SeekOrigin.Begin);
-                    Assert.True(MemoryStreamHelper.VerifyRead(ms));
+                    Assert.IsTrue(MemoryStreamHelper.VerifyRead(ms));
 
                     OutputHelper.WriteLine("Verify Read validation with UTF8 string");
 
@@ -269,7 +269,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     string testResult = new string(Encoding.UTF8.GetChars(readbuff));
 
-                    Assert.Equal(test, testResult, $"Exepected: {test}, but got: {testResult}");
+                    Assert.AreEqual(test, testResult, $"Exepected: {test}, but got: {testResult}");
                 }
             }
             catch (Exception ex)
@@ -309,11 +309,11 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     {
                         int bit = ms.ReadByte();
 
-                        Assert.Equal(bit, j + 1, $"Err_8324t! Check #458551, Returned: {bit}, Expected: {j + 1}");
+                        Assert.AreEqual(bit, j + 1, $"Err_8324t! Check #458551, Returned: {bit}, Expected: {j + 1}");
                     }
 
                     //last bit should be the same
-                    Assert.Equal(ms.ReadByte(), i - 1, "Err_32947gs! Last bit is not correct Check VSWhdibey #458551");
+                    Assert.AreEqual(ms.ReadByte(), i - 1, "Err_32947gs! Last bit is not correct Check VSWhdibey #458551");
                 }
 
                 //Buffer sizes of 9 (10 here since we shift by 1) and above doesn't have the above 'optimization' problem
@@ -342,11 +342,11 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                         if (j != ms.Length - 1)
                         {
-                            Assert.Equal(bit, j + 1, $"Err_235radg_{i}! Check VSWhdibey #458551, Returned: {bit}, Expected: {j + 1}");
+                            Assert.AreEqual(bit, j + 1, $"Err_235radg_{i}! Check VSWhdibey #458551, Returned: {bit}, Expected: {j + 1}");
                         }
                         else
                         {
-                            Assert.Equal(bit, j, $"Err_235radg_{i}! Check VSWhdibey #458551, Returned: {bit}, Expected:{j + 1}");
+                            Assert.AreEqual(bit, j, $"Err_235radg_{i}! Check VSWhdibey #458551, Returned: {bit}, Expected:{j + 1}");
                         }
                     }
                 }
@@ -368,12 +368,12 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     {
                         TestWrite(ms, i);
                         ms.Position = 0;
-                        Assert.True(MemoryStreamHelper.VerifyRead(ms));
+                        Assert.IsTrue(MemoryStreamHelper.VerifyRead(ms));
 
                         OutputHelper.WriteLine("Position: " + ms.Position);
                         OutputHelper.WriteLine("Length: " + ms.Length);
 
-                        Assert.True(
+                        Assert.IsTrue(
                             (i != ms.Position | i != ms.Length),
                             $"Expected Position and Length to be {i}");
                     }

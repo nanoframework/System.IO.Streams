@@ -22,7 +22,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                 using (MemoryStream fs = new MemoryStream())
                 {
-                    Assert.True(fs.CanSeek, "Expected CanSeek == true, but got CanSeek == false");
+                    Assert.IsTrue(fs.CanSeek, "Expected CanSeek == true, but got CanSeek == false");
                 }
             }
             catch (Exception ex)
@@ -42,7 +42,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                 using (MemoryStream fs = new MemoryStream(buffer))
                 {
-                    Assert.True(fs.CanSeek, "Expected CanSeek == true, but got CanSeek == false");
+                    Assert.IsTrue(fs.CanSeek, "Expected CanSeek == true, but got CanSeek == false");
                 }
             }
             catch (Exception ex)

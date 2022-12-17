@@ -25,7 +25,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     ms.Write(data, 0, data.Length);
                     ms.Flush();
 
-                    Assert.Equal(ms.Length, 5000, $"Expected 5000 bytes, but got {ms.Length}");
+                    Assert.AreEqual(ms.Length, 5000, $"Expected 5000 bytes, but got {ms.Length}");
                 }
             }
             catch (Exception ex)

@@ -29,7 +29,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                 OutputHelper.WriteLine("Read from closed stream");
 
                 int readBytes = 0;
-                Assert.Throws(typeof(ObjectDisposedException),
+                Assert.ThrowsException(typeof(ObjectDisposedException),
                     () =>
                     {
                         readBytes = ms2.ReadByte();
@@ -58,14 +58,14 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     {
                         int b = ms.ReadByte();
 
-                        Assert.Equal(b, i, $"Expected {i} but got {b}");
+                        Assert.AreEqual(b, i, $"Expected {i} but got {b}");
                     }
 
                     OutputHelper.WriteLine("Bytes past EOS should return -1");
 
                     int rb = ms.ReadByte();
 
-                    Assert.Equal(rb, -1, $"Expected -1 but got {rb}");
+                    Assert.AreEqual(rb, -1, $"Expected -1 but got {rb}");
                 }
             }
             catch (Exception ex)

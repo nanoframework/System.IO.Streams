@@ -69,7 +69,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     int read = 0;
 
-                    Assert.Throws(typeof(NotSupportedException),
+                    Assert.ThrowsException(typeof(NotSupportedException),
                         () =>
                         {
                             read = ms.Read(null, 0, 0);
@@ -78,7 +78,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     OutputHelper.WriteLine("negative offset");
 
-                    Assert.Throws(typeof(ArgumentOutOfRangeException),
+                    Assert.ThrowsException(typeof(ArgumentOutOfRangeException),
                         () =>
                         {
                             read = ms.Read(new byte[] { 1 }, -1, 0);
@@ -87,7 +87,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     OutputHelper.WriteLine("negative count");
 
-                    Assert.Throws(typeof(ArgumentOutOfRangeException),
+                    Assert.ThrowsException(typeof(ArgumentOutOfRangeException),
                         () =>
                         {
                             read = ms.Read(new byte[] { 1 }, 0, -1);
@@ -96,7 +96,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     OutputHelper.WriteLine("offset exceeds buffer size");
 
-                    Assert.Throws(typeof(ArgumentException),
+                    Assert.ThrowsException(typeof(ArgumentException),
                         () =>
                         {
                             read = ms.Read(new byte[] { 1 }, 2, 0);
@@ -105,7 +105,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     OutputHelper.WriteLine("count exceeds buffer size");
 
-                    Assert.Throws(typeof(ArgumentException),
+                    Assert.ThrowsException(typeof(ArgumentException),
                         () =>
                         {
                             read = ms.Read(new byte[] { 1 }, 0, 2);
@@ -121,7 +121,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                 OutputHelper.WriteLine("Read from closed stream");
 
                 int readBytes = 0;
-                Assert.Throws(typeof(ObjectDisposedException),
+                Assert.ThrowsException(typeof(ObjectDisposedException),
                     () =>
                     {
                         readBytes = ms2.Read(new byte[] { 50 }, 0, 50);
@@ -146,29 +146,29 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     ms.Seek(0, SeekOrigin.Begin);
 
                     OutputHelper.WriteLine("Read 256 bytes of data");
-                    Assert.True(TestRead(ms, 256));
+                    Assert.IsTrue(TestRead(ms, 256));
 
                     OutputHelper.WriteLine("Request less bytes then buffer");
-                    Assert.True(TestRead(ms, 256, 100, 100));
+                    Assert.IsTrue(TestRead(ms, 256, 100, 100));
 
                     // 1000 - 256 - 100 = 644
                     OutputHelper.WriteLine("Request more bytes then file");
-                    Assert.True(TestRead(ms, 1000, 1000, 644));
+                    Assert.IsTrue(TestRead(ms, 1000, 1000, 644));
 
                     OutputHelper.WriteLine("Request bytes after EOF");
-                    Assert.True(TestRead(ms, 100, 100, 0));
+                    Assert.IsTrue(TestRead(ms, 100, 100, 0));
 
                     OutputHelper.WriteLine("Rewind and read entire file in one buffer larger then file");
                     ms.Seek(0, SeekOrigin.Begin);
-                    Assert.True(TestRead(ms, 1001, 1001, 1000));
+                    Assert.IsTrue(TestRead(ms, 1001, 1001, 1000));
 
                     OutputHelper.WriteLine("Rewind and read from middle");
                     ms.Position = 500;
-                    Assert.True(TestRead(ms, 256));
+                    Assert.IsTrue(TestRead(ms, 256));
 
                     OutputHelper.WriteLine("Read position after EOS");
                     ms.Position = ms.Length + 10;
-                    Assert.True(TestRead(ms, 100, 100, 0));
+                    Assert.IsTrue(TestRead(ms, 100, 100, 0));
 
                     OutputHelper.WriteLine("Verify Read validation with UTF8 string");
 
@@ -183,7 +183,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     ms.Read(readbuff, 0, readbuff.Length);
 
                     string testResult = new string(Encoding.UTF8.GetChars(readbuff));
-                    Assert.Equal(test, testResult, $"Exepected: {test}, but got: {testResult}");
+                    Assert.AreEqual(test, testResult, $"Exepected: {test}, but got: {testResult}");
                 }
             }
             catch (Exception ex)
