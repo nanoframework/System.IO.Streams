@@ -9,7 +9,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace Sytem.IO.MemoryStreamUnitTests
+namespace System.IO.MemoryStreamUnitTests
 {
     [TestClass]
     public class Read
