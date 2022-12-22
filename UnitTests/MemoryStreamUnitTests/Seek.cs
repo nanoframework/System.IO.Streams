@@ -8,7 +8,7 @@ using nanoFramework.TestFramework;
 using System;
 using System.IO;
 
-namespace Sytem.IO.MemoryStreamUnitTests
+namespace System.IO.MemoryStreamUnitTests
 {
     [TestClass]
     public class Seek
@@ -60,7 +60,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
             try
             {
-                Assert.Throws(typeof(IOException),
+                Assert.ThrowsException(typeof(IOException),
                     () =>
                     {
                         OutputHelper.WriteLine("Seek -1 from Begin");
@@ -70,7 +70,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     },
                     $"Expected IOException, but got position");
 
-                Assert.Throws(typeof(IOException),
+                Assert.ThrowsException(typeof(IOException),
                     () =>
                     {
                         OutputHelper.WriteLine("Seek -1001 from Current - at end from write");
@@ -79,7 +79,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     },
                     "Expected IOException, but got position ");
 
-                Assert.Throws(typeof(IOException),
+                Assert.ThrowsException(typeof(IOException),
                     () =>
 
                     {
@@ -88,7 +88,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     },
                     "Expected IOException, but got position ");
 
-                Assert.Throws(typeof(ArgumentException),
+                Assert.ThrowsException(typeof(ArgumentException),
                     () =>
                     {
                         OutputHelper.WriteLine("Seek invalid -1 origin");
@@ -96,7 +96,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     },
                     "Expected ArgumentException, but got position");
 
-                Assert.Throws(typeof(ArgumentException),
+                Assert.ThrowsException(typeof(ArgumentException),
                     () =>
                     {
                         OutputHelper.WriteLine("Seek invalid 10 origin");
@@ -104,7 +104,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     },
                     "Expected ArgumentException, but got position");
 
-                Assert.Throws(typeof(ObjectDisposedException),
+                Assert.ThrowsException(typeof(ObjectDisposedException),
                     () =>
                     {
                         OutputHelper.WriteLine("Seek with closed stream");
@@ -113,7 +113,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     },
                     "Expected ObjectDisposedException, but got position");
 
-                Assert.Throws(typeof(ObjectDisposedException),
+                Assert.ThrowsException(typeof(ObjectDisposedException),
                     () =>
                     {
                         OutputHelper.WriteLine("Seek with disposed stream");
@@ -146,33 +146,33 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     MemoryStreamHelper.Write(fs, 1000);
 
                     OutputHelper.WriteLine("Seek to beginning");
-                    Assert.True(TestSeek(fs, 0, SeekOrigin.Begin, 0));
+                    Assert.IsTrue(TestSeek(fs, 0, SeekOrigin.Begin, 0));
 
                     OutputHelper.WriteLine("Seek forward offset from begging");
-                    Assert.True(TestSeek(fs, 10, SeekOrigin.Begin, 0));
+                    Assert.IsTrue(TestSeek(fs, 10, SeekOrigin.Begin, 0));
 
                     OutputHelper.WriteLine("Seek backwards offset from current");
-                    Assert.True(TestSeek(fs, -5, SeekOrigin.Current, 5));
+                    Assert.IsTrue(TestSeek(fs, -5, SeekOrigin.Current, 5));
 
                     OutputHelper.WriteLine("Seek forwards offset from current");
-                    Assert.True(TestSeek(fs, 20, SeekOrigin.Current, 25));
+                    Assert.IsTrue(TestSeek(fs, 20, SeekOrigin.Current, 25));
 
                     OutputHelper.WriteLine("Seek to end");
-                    Assert.True(TestSeek(fs, 0, SeekOrigin.End, 1000));
+                    Assert.IsTrue(TestSeek(fs, 0, SeekOrigin.End, 1000));
 
                     OutputHelper.WriteLine("Seek backwards offset from end");
-                    Assert.True(TestSeek(fs, -35, SeekOrigin.End, 965));
+                    Assert.IsTrue(TestSeek(fs, -35, SeekOrigin.End, 965));
 
                     OutputHelper.WriteLine("Seek past end relative to End");
-                    Assert.True(TestExtend(fs, 1, SeekOrigin.End, 1001, 1002));
+                    Assert.IsTrue(TestExtend(fs, 1, SeekOrigin.End, 1001, 1002));
 
                     OutputHelper.WriteLine("Seek past end relative to Begin");
-                    Assert.True(TestExtend(fs, 1002, SeekOrigin.Begin, 1002, 1003));
+                    Assert.IsTrue(TestExtend(fs, 1002, SeekOrigin.Begin, 1002, 1003));
 
                     OutputHelper.WriteLine("Seek past end relative to Current");
-                    Assert.True(TestSeek(fs, 995, SeekOrigin.Begin, 995));
+                    Assert.IsTrue(TestSeek(fs, 995, SeekOrigin.Begin, 995));
 
-                    Assert.True(TestExtend(fs, 10, SeekOrigin.Current, 1005, 1006));
+                    Assert.IsTrue(TestExtend(fs, 10, SeekOrigin.Current, 1005, 1006));
 
                     // 1000 --123456
                     // verify 011001
@@ -185,7 +185,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     for (int i = 0; i < buff.Length; i++)
                     {
-                        Assert.Equal(buff[i], verify[i], $"Position {i}:{buff[i]} != {verify[i]}");
+                        Assert.AreEqual(buff[i], verify[i], $"Position {i}:{buff[i]} != {verify[i]}");
                     }
                 }
             }

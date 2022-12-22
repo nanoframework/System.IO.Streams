@@ -8,7 +8,7 @@ using nanoFramework.TestFramework;
 using System;
 using System.IO;
 
-namespace Sytem.IO.MemoryStreamUnitTests
+namespace System.IO.MemoryStreamUnitTests
 {
     [TestClass]
     public class WriteByte
@@ -64,12 +64,12 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     ms.Position = 300;
                     ms.WriteByte(123);
 
-                    Assert.Equal(ms.Length, 301, $"Expected length 301, got length {ms.Length}");
+                    Assert.AreEqual(ms.Length, 301, $"Expected length 301, got length {ms.Length}");
 
                     ms.Position = 300;
                     int read = ms.ReadByte();
 
-                    Assert.Equal(read, 123, $"Expected value 123, but got value {read}");
+                    Assert.AreEqual(read, 123, $"Expected value 123, but got value {read}");
                 }
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     ms.Position = buffer.Length + 1;
 
-                    Assert.Throws(typeof(NotSupportedException),
+                    Assert.ThrowsException(typeof(NotSupportedException),
                         () =>
                         {
                             ms.WriteByte(1);
@@ -120,15 +120,15 @@ namespace Sytem.IO.MemoryStreamUnitTests
                 {
                     OutputHelper.WriteLine("Write 50 bytes of data");
 
-                    Assert.True(TestWrite(ms, 50, 100));
+                    Assert.IsTrue(TestWrite(ms, 50, 100));
 
                     OutputHelper.WriteLine("Write final 50 bytes of data");
 
-                    Assert.True(TestWrite(ms, 50, 100));
+                    Assert.IsTrue(TestWrite(ms, 50, 100));
 
                     OutputHelper.WriteLine("Any more bytes written should throw");
 
-                    Assert.Throws(typeof(NotSupportedException),
+                    Assert.ThrowsException(typeof(NotSupportedException),
                         () =>
                         {
                             ms.WriteByte(50);
@@ -139,7 +139,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     ms.Seek(0, SeekOrigin.Begin);
 
-                    Assert.True(MemoryStreamHelper.VerifyRead(ms));
+                    Assert.IsTrue(MemoryStreamHelper.VerifyRead(ms));
                 }
 
                 OutputHelper.WriteLine("Dynamic Buffer");
@@ -147,21 +147,21 @@ namespace Sytem.IO.MemoryStreamUnitTests
                 using (MemoryStream ms = new MemoryStream())
                 {
                     OutputHelper.WriteLine("Write 100 bytes of data");
-                    Assert.True(TestWrite(ms, 100));
+                    Assert.IsTrue(TestWrite(ms, 100));
 
                     OutputHelper.WriteLine("Extend internal buffer, write 160");
-                    Assert.True(TestWrite(ms, 160));
+                    Assert.IsTrue(TestWrite(ms, 160));
 
                     OutputHelper.WriteLine("Double extend internal buffer, write 644");
-                    Assert.True(TestWrite(ms, 644));
+                    Assert.IsTrue(TestWrite(ms, 644));
 
                     OutputHelper.WriteLine("write another 1100");
-                    Assert.True(TestWrite(ms, 1100));
+                    Assert.IsTrue(TestWrite(ms, 1100));
 
                     OutputHelper.WriteLine("Rewind and verify all bytes written");
                     ms.Seek(0, SeekOrigin.Begin);
 
-                    Assert.True(MemoryStreamHelper.VerifyRead(ms));
+                    Assert.IsTrue(MemoryStreamHelper.VerifyRead(ms));
                 }
             }
             catch (Exception ex)
@@ -182,12 +182,12 @@ namespace Sytem.IO.MemoryStreamUnitTests
                         MemoryStreamHelper.Write(ms, i);
                         ms.Position = 0;
 
-                        Assert.True(MemoryStreamHelper.VerifyRead(ms));
+                        Assert.IsTrue(MemoryStreamHelper.VerifyRead(ms));
 
                         OutputHelper.WriteLine("Position: " + ms.Position);
                         OutputHelper.WriteLine("Length: " + ms.Length);
 
-                        Assert.True(
+                        Assert.IsTrue(
                             (i != ms.Position | i != ms.Length),
                             $"Expected Position and Length to be {i}");
                     }

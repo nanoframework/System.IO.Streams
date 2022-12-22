@@ -8,7 +8,7 @@ using nanoFramework.TestFramework;
 using System;
 using System.IO;
 
-namespace Sytem.IO.MemoryStreamUnitTests
+namespace System.IO.MemoryStreamUnitTests
 {
     [TestClass]
     public class CanRead
@@ -23,7 +23,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                 using (MemoryStream fs = new MemoryStream())
                 {
-                    Assert.True(fs.CanRead, "Expected CanRead == true, but got CanRead == false");
+                    Assert.IsTrue(fs.CanRead, "Expected CanRead == true, but got CanRead == false");
                 }
             }
             catch (Exception ex)
@@ -43,7 +43,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                 using (MemoryStream fs = new MemoryStream(buffer))
                 {
-                    Assert.True(fs.CanRead, "Expected CanRead == true, but got CanRead == false");
+                    Assert.IsTrue(fs.CanRead, "Expected CanRead == true, but got CanRead == false");
                 }
             }
             catch (Exception ex)

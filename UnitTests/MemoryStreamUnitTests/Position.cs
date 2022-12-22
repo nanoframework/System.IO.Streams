@@ -8,7 +8,7 @@ using nanoFramework.TestFramework;
 using System;
 using System.IO;
 
-namespace Sytem.IO.MemoryStreamUnitTests
+namespace System.IO.MemoryStreamUnitTests
 {
     [TestClass]
     public class Position
@@ -92,7 +92,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                 {
                     OutputHelper.WriteLine("Try -1 postion");
 
-                    Assert.Throws(typeof(ArgumentOutOfRangeException),
+                    Assert.ThrowsException(typeof(ArgumentOutOfRangeException),
                         () =>
                         {
                             ms.Position = -1;
@@ -101,7 +101,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     OutputHelper.WriteLine("Try Long.MinValue postion");
 
-                    Assert.Throws(typeof(ArgumentOutOfRangeException),
+                    Assert.ThrowsException(typeof(ArgumentOutOfRangeException),
                         () =>
                         {
                             ms.Position = long.MinValue;
@@ -126,7 +126,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                 using (MemoryStream ms = new MemoryStream(buffer))
                 {
-                    Assert.True(GetSetPosition(ms, buffer.Length));
+                    Assert.IsTrue(GetSetPosition(ms, buffer.Length));
                 }
             }
             catch (Exception ex)
@@ -144,7 +144,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    Assert.True(GetSetPosition(ms, 1000));
+                    Assert.IsTrue(GetSetPosition(ms, 1000));
                 }
             }
             catch (Exception ex)

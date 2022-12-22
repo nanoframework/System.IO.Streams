@@ -8,7 +8,7 @@ using nanoFramework.TestFramework;
 using System;
 using System.IO;
 
-namespace Sytem.IO.MemoryStreamUnitTests
+namespace System.IO.MemoryStreamUnitTests
 {
     [TestClass]
     public class Close
@@ -26,7 +26,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                 OutputHelper.WriteLine("Close stream");
                 ms.Close();
 
-                Assert.Throws(typeof(ObjectDisposedException),
+                Assert.ThrowsException(typeof(ObjectDisposedException),
                     () =>
                     {
                         OutputHelper.WriteLine("Verify actually closed by writing to it");

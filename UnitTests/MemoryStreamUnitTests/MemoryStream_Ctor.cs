@@ -8,7 +8,7 @@ using nanoFramework.TestFramework;
 using System;
 using System.IO;
 
-namespace Sytem.IO.MemoryStreamUnitTests
+namespace System.IO.MemoryStreamUnitTests
 {
     [TestClass]
     public class MemoryStream_Ctor
@@ -18,7 +18,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
         [TestMethod]
         public void InvalidArguments()
         {
-            Assert.Throws(
+            Assert.ThrowsException(
                typeof(ArgumentNullException), () =>
                {
                    OutputHelper.WriteLine("null buffer");
@@ -35,7 +35,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    Assert.True(ValidateMemoryStream(ms, 0), "Failed to ValidateMemoryStream");
+                    Assert.IsTrue(ValidateMemoryStream(ms, 0), "Failed to ValidateMemoryStream");
                 }
             }
             catch (Exception ex)
@@ -58,11 +58,11 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     using (MemoryStream ms = new MemoryStream(buffer))
                     {
-                        Assert.True(ValidateMemoryStream(ms, i), "Failed to ValidateMemoryStream");
+                        Assert.IsTrue(ValidateMemoryStream(ms, i), "Failed to ValidateMemoryStream");
 
                         OutputHelper.WriteLine("Try to extend beyond buffer length");
 
-                        Assert.Throws(typeof(NotSupportedException),
+                        Assert.ThrowsException(typeof(NotSupportedException),
                             () =>
                             {
                                 ms.SetLength(i + 1);
@@ -85,7 +85,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                 using (MemoryStream ms = new MemoryStream(largeBuffer))
                 {
-                    Assert.True(ValidateMemoryStream(ms, largeBuffer.Length), "Failed to ValidateMemoryStream");
+                    Assert.IsTrue(ValidateMemoryStream(ms, largeBuffer.Length), "Failed to ValidateMemoryStream");
                 }
             }
             catch (Exception ex)

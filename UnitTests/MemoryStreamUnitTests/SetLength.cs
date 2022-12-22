@@ -8,7 +8,7 @@ using nanoFramework.TestFramework;
 using System;
 using System.IO;
 
-namespace Sytem.IO.MemoryStreamUnitTests
+namespace System.IO.MemoryStreamUnitTests
 {
     [TestClass]
     public class SetLength
@@ -73,7 +73,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     OutputHelper.WriteLine("Set initial length to 50, and position to 50");
                     ms.SetLength(50);
                     ms.Position = 50;
-                    Assert.True(TestLength(ms, 50));
+                    Assert.IsTrue(TestLength(ms, 50));
 
                     OutputHelper.WriteLine("Write 'foo bar'");
 
@@ -81,18 +81,18 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                     sw.Write("foo bar");
                     sw.Flush();
-                    Assert.True(TestLength(ms, 57));
+                    Assert.IsTrue(TestLength(ms, 57));
 
                     OutputHelper.WriteLine("Shorten Length to 30");
                     ms.SetLength(30);
-                    Assert.True(TestLength(ms, 30));
+                    Assert.IsTrue(TestLength(ms, 30));
 
                     OutputHelper.WriteLine("Verify position was adjusted");
-                    Assert.True(TestPosition(ms, 30));
+                    Assert.IsTrue(TestPosition(ms, 30));
 
                     OutputHelper.WriteLine("Extend length to 100");
                     ms.SetLength(100);
-                    Assert.True(TestLength(ms, 100));
+                    Assert.IsTrue(TestLength(ms, 100));
                 }
             }
             catch (Exception ex)
@@ -108,7 +108,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    Assert.Throws(typeof(ArgumentOutOfRangeException),
+                    Assert.ThrowsException(typeof(ArgumentOutOfRangeException),
                         () =>
                         {
                             OutputHelper.WriteLine("-1");
@@ -116,7 +116,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                         },
                         "Expected ArgumentOutOfRangeException, but set length");
 
-                    Assert.Throws(typeof(ArgumentOutOfRangeException),
+                    Assert.ThrowsException(typeof(ArgumentOutOfRangeException),
                         () =>
                         {
                             OutputHelper.WriteLine("-10000");
@@ -124,7 +124,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                         },
                         "Expected ArgumentOutOfRangeException, but set length");
 
-                    Assert.Throws(typeof(ArgumentOutOfRangeException),
+                    Assert.ThrowsException(typeof(ArgumentOutOfRangeException),
                         () =>
                         {
                             OutputHelper.WriteLine("long.MinValue");
@@ -132,7 +132,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                         },
                         "Expected ArgumentOutOfRangeException, but set length");
 
-                    Assert.Throws(typeof(ArgumentOutOfRangeException),
+                    Assert.ThrowsException(typeof(ArgumentOutOfRangeException),
                         () =>
                         {
                             OutputHelper.WriteLine("long.MaxValue");

@@ -8,7 +8,7 @@ using nanoFramework.TestFramework;
 using System;
 using System.IO;
 
-namespace Sytem.IO.MemoryStreamUnitTests
+namespace System.IO.MemoryStreamUnitTests
 {
     [TestClass]
     public class ToArray
@@ -63,7 +63,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                 {
                     byte[] stream = ms.ToArray();
 
-                    Assert.Equal(stream.Length, 0, $"Expected length 0, but got length {stream.Length}");
+                    Assert.AreEqual(stream.Length, 0, $"Expected length 0, but got length {stream.Length}");
                 }
 
                 OutputHelper.WriteLine("Static Stream");
@@ -72,7 +72,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                 {
                     byte[] stream = ms.ToArray();
 
-                    Assert.Equal(stream.Length, 512, $"Expected length 512, but got length {stream.Length}");
+                    Assert.AreEqual(stream.Length, 512, $"Expected length 512, but got length {stream.Length}");
                 }
             }
             catch (Exception ex)
@@ -94,7 +94,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     MemoryStreamHelper.Write(ms, 1000);
                     byte[] stream = ms.ToArray();
 
-                    Assert.True(VerifyArray(stream, 1000));
+                    Assert.IsTrue(VerifyArray(stream, 1000));
                 }
             }
             catch (Exception ex)
@@ -115,7 +115,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     ms.SetLength(200);
                     ms.Flush();
                     byte[] stream = ms.ToArray();
-                    Assert.True(VerifyArray(stream, 200));
+                    Assert.IsTrue(VerifyArray(stream, 200));
                 }
             }
             catch (Exception ex)

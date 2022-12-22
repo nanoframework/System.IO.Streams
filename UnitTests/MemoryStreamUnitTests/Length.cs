@@ -8,7 +8,7 @@ using nanoFramework.TestFramework;
 using System;
 using System.IO;
 
-namespace Sytem.IO.MemoryStreamUnitTests
+namespace System.IO.MemoryStreamUnitTests
 {
     [TestClass]
     public class Length
@@ -51,7 +51,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                 long length = 0;
 
-                Assert.Throws(typeof(ObjectDisposedException),
+                Assert.ThrowsException(typeof(ObjectDisposedException),
                     () =>
                     {
                         length = ms.Length;
@@ -74,32 +74,32 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     OutputHelper.WriteLine("Set initial length to 50, and position to 50");
                     ms.SetLength(50);
                     ms.Position = 50;
-                    Assert.True(TestLength(ms, 50));
+                    Assert.IsTrue(TestLength(ms, 50));
 
                     OutputHelper.WriteLine("Write 'foo bar'");
 
                     StreamWriter sw = new StreamWriter(ms);
                     sw.Write("foo bar");
                     sw.Flush();
-                    Assert.True(TestLength(ms, 57));
+                    Assert.IsTrue(TestLength(ms, 57));
 
                     OutputHelper.WriteLine("Shorten Length to 30");
                     ms.SetLength(30);
-                    Assert.True(TestLength(ms, 30));
+                    Assert.IsTrue(TestLength(ms, 30));
 
                     OutputHelper.WriteLine("Verify position was adjusted");
-                    Assert.True(TestPosition(ms, 30));
+                    Assert.IsTrue(TestPosition(ms, 30));
 
                     OutputHelper.WriteLine("Extend length to 100");
                     ms.SetLength(100);
-                    Assert.True(TestLength(ms, 100));
+                    Assert.IsTrue(TestLength(ms, 100));
                 }
 
                 OutputHelper.WriteLine("Verify memorystream is 0 bytes after close");
 
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    Assert.True(TestLength(ms, 0));
+                    Assert.IsTrue(TestLength(ms, 0));
                 }
             }
             catch (Exception ex)

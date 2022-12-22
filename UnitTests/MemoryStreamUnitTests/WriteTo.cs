@@ -8,7 +8,7 @@ using nanoFramework.TestFramework;
 using System;
 using System.IO;
 
-namespace Sytem.IO.MemoryStreamUnitTests
+namespace System.IO.MemoryStreamUnitTests
 {
     [TestClass]
     public class WriteTo
@@ -26,7 +26,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     OutputHelper.WriteLine("Initialize stream");
                     MemoryStreamHelper.Write(ms, 1000);
 
-                    Assert.Throws(typeof(ArgumentNullException), () =>
+                    Assert.ThrowsException(typeof(ArgumentNullException), () =>
                     {
                         OutputHelper.WriteLine("null stream");
                         ms.WriteTo(null);
@@ -35,7 +35,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     "Expected ArgumentNullException"
                     );
 
-                    Assert.Throws(typeof(ObjectDisposedException),
+                    Assert.ThrowsException(typeof(ObjectDisposedException),
                         () =>
                     {
                         OutputHelper.WriteLine("Target Stream closed");
@@ -49,7 +49,7 @@ namespace Sytem.IO.MemoryStreamUnitTests
                     OutputHelper.WriteLine("Current Stream closed");
                     ms.Close();
 
-                    Assert.Throws(typeof(ObjectDisposedException),
+                    Assert.ThrowsException(typeof(ObjectDisposedException),
                         () =>
                         {
                             using (MemoryStream mst = new MemoryStream())
@@ -87,11 +87,11 @@ namespace Sytem.IO.MemoryStreamUnitTests
 
                         OutputHelper.WriteLine("Verify 2nd MemoryStream");
 
-                        Assert.Equal(ms2.Length, 1234, $"Expected 1234 bytes, but got: {ms2.Length}");
+                        Assert.AreEqual(ms2.Length, 1234, $"Expected 1234 bytes, but got: {ms2.Length}");
 
                         ms2.Position = 0;
 
-                        Assert.True(MemoryStreamHelper.VerifyRead(ms2));
+                        Assert.IsTrue(MemoryStreamHelper.VerifyRead(ms2));
                     }
                 }
             }
