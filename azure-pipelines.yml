@@ -62,7 +62,7 @@ jobs:
       unitTestRunsettings: '$(System.DefaultWorkingDirectory)\.runsettings'
 
 ##############################
-- job: Update_Dependencies
+- job: Update_Dependents
   condition: >-
     or(
       and(
@@ -104,11 +104,15 @@ jobs:
 ##################################
 # report build failure to Discord
 - job: Report_Build_Failure
-  condition: or( failed('Build_Library'), failed('Update_Dependencies'))
+  condition: >-
+    or(
+      failed('Build_Library'),
+      failed('Update_Dependents')
+    )
 
   dependsOn:
   - Build_Library
-  - Update_Dependencies
+  - Update_Dependents
 
   pool:
     vmImage: 'windows-latest'
