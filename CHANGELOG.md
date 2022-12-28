@@ -1,8 +1,8 @@
 # Changelog
 
-## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.IO.Streams/tree/HEAD)
+## [v1.1.36](https://github.com/nanoframework/System.IO.Streams/tree/v1.1.36) (2022-12-28)
 
-[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.1.27...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.1.27...v1.1.36)
 
 **Fixed bugs:**
 
