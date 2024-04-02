@@ -13,12 +13,13 @@ namespace System.IO
     /// </summary>
     public class StreamWriter : TextWriter
     {
-        private const string c_NewLine = "\r\n";
         private const int c_BufferSize = 0xFFF;
 
         private bool _disposed;
         private byte[] _buffer;
         private int _curBufPos;
+        // must equal TextWriter._InitialNewLine
+        private byte[] _newLineBytes = Encoding.UTF8.GetBytes("\r\n");
 
         /// <summary>
         /// Gets the underlying stream that interfaces with a backing store.
@@ -31,6 +32,20 @@ namespace System.IO
         /// </summary>
         /// <value>The Encoding specified in the constructor for the current instance, or <see cref="UTF8Encoding"/> if an encoding was not specified.</value>
         public override Encoding Encoding => Encoding.UTF8;
+
+        /// <inheritdoc/>
+        public override string NewLine
+        {
+            get
+            {
+                return base.NewLine;
+            }
+            set
+            {
+                base.NewLine = value;
+                _newLineBytes = this.Encoding.GetBytes(value);
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamWriter"/> class for the specified stream by using UTF-8 encoding and the default buffer size.
@@ -160,13 +175,16 @@ namespace System.IO
         }
 
         /// <inheritdoc/>
+        public override void Write(string value)
+        {
+            byte[] tempBuf = Encoding.GetBytes(value);
+            WriteBytes(tempBuf, 0, tempBuf.Length);
+        }
+
+        /// <inheritdoc/>
         public override void WriteLine()
         {
-            byte[] tempBuf = Encoding.GetBytes(c_NewLine);
-
-            WriteBytes(tempBuf, 0, tempBuf.Length);
-
-            return;
+            WriteBytes(_newLineBytes, 0, _newLineBytes.Length);
         }
 
         /// <summary>
@@ -179,9 +197,8 @@ namespace System.IO
         /// </remarks>
         public override void WriteLine(string value)
         {
-            byte[] tempBuf = Encoding.GetBytes(value + c_NewLine);
-            WriteBytes(tempBuf, 0, tempBuf.Length);
-            return;
+            Write(value);
+            WriteLine();
         }
 
         internal void WriteBytes(
