@@ -392,7 +392,8 @@ namespace System.IO.MemoryStreamUnitTests
             using (var ms = new MemoryStream())
             {
                 ms.Position = maxLength - 1;
-                ms.WriteByte(0); // should resize the buffer to the max size
+                // should resize the buffer to the max size
+                ms.WriteByte(0);
             }
         }
 
@@ -403,6 +404,7 @@ namespace System.IO.MemoryStreamUnitTests
             using (var ms = new MemoryStream())
             {
                 ms.Position = maxLength;
+                // should throw as the max size is exceeded
                 Assert.ThrowsException(typeof(ArgumentOutOfRangeException), () => ms.WriteByte(0));
             }
         }
