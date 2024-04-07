@@ -385,6 +385,28 @@ namespace System.IO.MemoryStreamUnitTests
             }
         }
 
+        [TestMethod]
+        public void Write_AtMaxLength_Works()
+        {
+            var maxLength = 0xFFFF;
+            using (var ms = new MemoryStream())
+            {
+                ms.Position = maxLength - 1;
+                ms.WriteByte(0); // should resize the buffer to the max size
+            }
+        }
+
+        [TestMethod]
+        public void Write_AboveMaxLength_Throws()
+        {
+            var maxLength = 0xFFFF;
+            using (var ms = new MemoryStream())
+            {
+                ms.Position = maxLength;
+                Assert.ThrowsException(typeof(ArgumentOutOfRangeException), () => ms.WriteByte(0));
+            }
+        }
+
         #endregion Test Cases
     }
 }
