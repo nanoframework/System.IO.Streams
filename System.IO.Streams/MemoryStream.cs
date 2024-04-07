@@ -453,6 +453,7 @@ namespace System.IO
         /// <param name="value">Value for the new capacity.</param>
         /// <returns><see langword="true"/> if allocation for a new array was successful. <see langword="false"/> otherwise.</returns>
         /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private bool EnsureCapacity(int value)
         {
             if (value > _capacity)
@@ -464,9 +465,19 @@ namespace System.IO
                     newCapacity = CapacityDefaultSize;
                 }
 
+                if (value > MemStreamMaxLength)
+                {
+                    throw new ArgumentOutOfRangeException("value", $"MemoryStream can't be more than {MemStreamMaxLength} bytes");
+                }
+
                 if (newCapacity < _capacity * 2)
                 {
                     newCapacity = _capacity * 2;
+                }
+
+                if (newCapacity > MemStreamMaxLength)
+                {
+                    newCapacity = MemStreamMaxLength;
                 }
 
                 if (!_expandable && newCapacity > _capacity)
