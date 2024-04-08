@@ -2,7 +2,19 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.IO.Streams/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.1.38...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.1.52...HEAD)
+
+**Implemented enhancements:**
+
+- Apply NewLine in StreamWriter, improve performance [\#51](https://github.com/nanoframework/System.IO.Streams/pull/51)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#50](https://github.com/nanoframework/System.IO.Streams/pull/50)
+
+## [v1.1.52](https://github.com/nanoframework/System.IO.Streams/tree/v1.1.52) (2023-11-09)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.1.38...v1.1.52)
 
 **Documentation and other chores:**
 
