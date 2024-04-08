@@ -328,6 +328,9 @@ namespace System.IO
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ObjectDisposedException"></exception>
+        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the data and is not expandable.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">The MemoryStream max size was exceeded</exception>
         public override void SetLength(long value)
         {
             EnsureOpen();
@@ -364,6 +367,12 @@ namespace System.IO
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ObjectDisposedException"></exception>
+        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the data and is not expandable.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// The MemoryStream max size was exceeded or
+        /// <paramref name="offset"/> or <paramref name="count"/> are less than 0
+        /// </exception>
         public override void Write(byte[] buffer, int offset, int count)
         {
             EnsureOpen();
@@ -401,6 +410,9 @@ namespace System.IO
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ObjectDisposedException"></exception>
+        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the data and is not expandable.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">The MemoryStream max size was exceeded</exception>
         public override void WriteByte(byte value)
         {
             EnsureOpen();
@@ -452,7 +464,8 @@ namespace System.IO
         /// </summary>
         /// <param name="value">Value for the new capacity.</param>
         /// <returns><see langword="true"/> if allocation for a new array was successful. <see langword="false"/> otherwise.</returns>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the data and is not expandable.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">The MemoryStream max size would be exceeded by resizing</exception>
         private bool EnsureCapacity(int value)
         {
             if (value > _capacity)
@@ -464,9 +477,19 @@ namespace System.IO
                     newCapacity = CapacityDefaultSize;
                 }
 
+                if (value > MemStreamMaxLength)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+
                 if (newCapacity < _capacity * 2)
                 {
                     newCapacity = _capacity * 2;
+                }
+
+                if (newCapacity > MemStreamMaxLength)
+                {
+                    newCapacity = MemStreamMaxLength;
                 }
 
                 if (!_expandable && newCapacity > _capacity)
