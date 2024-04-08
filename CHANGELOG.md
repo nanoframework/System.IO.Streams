@@ -2,7 +2,19 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/System.IO.Streams/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.1.52...HEAD)
+[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.1.56...HEAD)
+
+**Fixed bugs:**
+
+- Check max length when writing MemoryStream [\#52](https://github.com/nanoframework/System.IO.Streams/pull/52)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#53](https://github.com/nanoframework/System.IO.Streams/pull/53)
+
+## [v1.1.56](https://github.com/nanoframework/System.IO.Streams/tree/v1.1.56) (2024-04-03)
+
+[Full Changelog](https://github.com/nanoframework/System.IO.Streams/compare/v1.1.52...v1.1.56)
 
 **Implemented enhancements:**
 
