@@ -51,5 +51,19 @@ namespace System.IO.MemoryStreamUnitTests
                  OutputHelper.WriteLine($"Unexpected exception {ex}");
             }
         }
+
+        [TestMethod]
+        public void CanWrite_bool_false_Ctor()
+        {
+            // Arrange
+            byte[] buffer = new byte[1024];
+
+            // Act
+            using MemoryStream fs = new MemoryStream(buffer, false);
+
+            // Assert
+            Assert.IsFalse(fs.CanWrite, "Expected CanWrite == false, but got CanWrite == true");
+            Assert.ThrowsException(typeof(NotSupportedException), () => fs.WriteByte(0), "Expected exception when attempt to write to a read only stream.");
+        }
     }
 }
