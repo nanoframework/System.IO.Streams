@@ -65,16 +65,7 @@ namespace System.IO
         /// The <see cref="CanRead"/>, <see cref="CanSeek"/>, and <see cref="CanWrite"/> properties are all set to <see langword="true"/>.
         /// </para>
         /// </remarks>
-        public MemoryStream(byte[] buffer)
-        {
-            _buffer = buffer ?? throw new ArgumentNullException();
-
-            _length = _capacity = buffer.Length;
-            _expandable = false;
-            _origin = 0;
-            _isOpen = true;
-            _isWritable = true;
-        }
+        public MemoryStream(byte[] buffer) : this(buffer, true) { }
 
         /// <summary>
         /// Initializes a new non-resizable instance of the <see cref="MemoryStream"/> class based on the specified byte array with the <see cref="CanWrite"/> property set as specified.
@@ -352,11 +343,7 @@ namespace System.IO
         public override void SetLength(long value)
         {
             EnsureOpen();
-
-            if(!CanWrite)
-            {
-                throw new NotSupportedException();
-            }
+            EnsureWritable();
 
             if (value > MemStreamMaxLength || value < 0)
             {
@@ -399,11 +386,7 @@ namespace System.IO
         public override void Write(byte[] buffer, int offset, int count)
         {
             EnsureOpen();
-
-            if (!CanWrite)
-            {
-                throw new NotSupportedException();
-            }
+            EnsureWritable();
 
             if (buffer == null)
             {
@@ -444,11 +427,7 @@ namespace System.IO
         public override void WriteByte(byte value)
         {
             EnsureOpen();
-
-            if (!CanWrite)
-            {
-                throw new NotSupportedException();
-            }
+            EnsureWritable();
 
             if (_position >= _capacity)
             {
@@ -489,6 +468,18 @@ namespace System.IO
             if (!_isOpen)
             {
                 throw new ObjectDisposedException();
+            }
+        }
+
+        /// <summary>
+        /// Check that stream is writable
+        /// </summary>
+        /// <exception cref="NotSupportedException"></exception>
+        private void EnsureWritable()
+        {
+            if (!CanWrite)
+            {
+                throw new NotSupportedException();
             }
         }
 
