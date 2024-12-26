@@ -338,7 +338,8 @@ namespace System.IO
 
         /// <inheritdoc/>
         /// <exception cref="ObjectDisposedException"></exception>
-        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the data and is not expandable.</exception>
+        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the 
+        /// data and is not expandable, and/or the stream is not writable.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The MemoryStream max size was exceeded</exception>
         public override void SetLength(long value)
         {
@@ -378,7 +379,8 @@ namespace System.IO
 
         /// <inheritdoc/>
         /// <exception cref="ObjectDisposedException"></exception>
-        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the data and is not expandable.</exception>
+        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the
+        /// data and is not expandable, and/or the stream is not writable.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// The MemoryStream max size was exceeded or
         /// <paramref name="offset"/> or <paramref name="count"/> are less than 0
@@ -422,7 +424,8 @@ namespace System.IO
 
         /// <inheritdoc/>
         /// <exception cref="ObjectDisposedException"></exception>
-        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the data and is not expandable.</exception>
+        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the
+        /// data and is not expandable, and/or the stream is not writable.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The MemoryStream max size was exceeded</exception>
         public override void WriteByte(byte value)
         {
@@ -472,7 +475,7 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Check that stream is writable
+        /// Check that stream is writable.
         /// </summary>
         /// <exception cref="NotSupportedException"></exception>
         private void EnsureWritable()
