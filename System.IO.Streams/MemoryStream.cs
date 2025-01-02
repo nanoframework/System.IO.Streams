@@ -27,6 +27,8 @@ namespace System.IO
         private readonly bool _expandable;
         // Is this stream open or closed?
         private bool _isOpen;
+        // Is the stream writable
+        private bool _isWritable;
 
         private const int MemStreamMaxLength = 0xFFFF;
 
@@ -50,6 +52,7 @@ namespace System.IO
             // Must be 0 for byte[]'s created by MemoryStream
             _origin = 0;
             _isOpen = true;
+            _isWritable = true;
         }
 
         /// <summary>
@@ -61,11 +64,16 @@ namespace System.IO
         /// <para>
         /// The <see cref="CanRead"/>, <see cref="CanSeek"/>, and <see cref="CanWrite"/> properties are all set to <see langword="true"/>.
         /// </para>
-        /// <para>
-        /// The capacity of the current stream automatically increases when you use the <see cref="SetLength"/> method to set the length to a value larger than the capacity of the current stream.
-        /// </para>
         /// </remarks>
-        public MemoryStream(byte[] buffer)
+        public MemoryStream(byte[] buffer) : this(buffer, true) { }
+
+        /// <summary>
+        /// Initializes a new non-resizable instance of the <see cref="MemoryStream"/> class based on the specified byte array with the <see cref="CanWrite"/> property set as specified.
+        /// </summary>
+        /// <param name="buffer">The array of unsigned bytes from which to create the current stream.</param>
+        /// <param name="isWritable">A bool indicating whether the stream should be writable</param>
+        /// <exception cref="ArgumentNullException"><paramref name="buffer"/> is <see langword="null"/>.</exception>
+        public MemoryStream(byte[] buffer, bool isWritable)
         {
             _buffer = buffer ?? throw new ArgumentNullException();
 
@@ -73,6 +81,7 @@ namespace System.IO
             _expandable = false;
             _origin = 0;
             _isOpen = true;
+            _isWritable = isWritable;
         }
 
         /// <summary>
@@ -115,7 +124,7 @@ namespace System.IO
         /// If the stream is closed, this property returns <see langword="false"/>.
         /// </para>
         /// </remarks>
-        public override bool CanWrite => _isOpen;
+        public override bool CanWrite => _isWritable;
 
         /// <inheritdoc/>
         protected override void Dispose(bool disposing)
@@ -329,11 +338,13 @@ namespace System.IO
 
         /// <inheritdoc/>
         /// <exception cref="ObjectDisposedException"></exception>
-        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the data and is not expandable.</exception>
+        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the 
+        /// data and is not expandable, and/or the stream is not writable.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The MemoryStream max size was exceeded</exception>
         public override void SetLength(long value)
         {
             EnsureOpen();
+            EnsureWritable();
 
             if (value > MemStreamMaxLength || value < 0)
             {
@@ -368,7 +379,8 @@ namespace System.IO
 
         /// <inheritdoc/>
         /// <exception cref="ObjectDisposedException"></exception>
-        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the data and is not expandable.</exception>
+        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the
+        /// data and is not expandable, and/or the stream is not writable.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// The MemoryStream max size was exceeded or
         /// <paramref name="offset"/> or <paramref name="count"/> are less than 0
@@ -376,6 +388,7 @@ namespace System.IO
         public override void Write(byte[] buffer, int offset, int count)
         {
             EnsureOpen();
+            EnsureWritable();
 
             if (buffer == null)
             {
@@ -411,11 +424,13 @@ namespace System.IO
 
         /// <inheritdoc/>
         /// <exception cref="ObjectDisposedException"></exception>
-        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the data and is not expandable.</exception>
+        /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the
+        /// data and is not expandable, and/or the stream is not writable.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The MemoryStream max size was exceeded</exception>
         public override void WriteByte(byte value)
         {
             EnsureOpen();
+            EnsureWritable();
 
             if (_position >= _capacity)
             {
@@ -456,6 +471,18 @@ namespace System.IO
             if (!_isOpen)
             {
                 throw new ObjectDisposedException();
+            }
+        }
+
+        /// <summary>
+        /// Check that stream is writable.
+        /// </summary>
+        /// <exception cref="NotSupportedException"></exception>
+        private void EnsureWritable()
+        {
+            if (!CanWrite)
+            {
+                throw new NotSupportedException();
             }
         }
 
