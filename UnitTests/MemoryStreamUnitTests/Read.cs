@@ -56,8 +56,6 @@ namespace System.IO.MemoryStreamUnitTests
 
         #endregion Local Helper methods
 
-        #region Test Cases
-
         [TestMethod]
         public void InvalidCases()
         {
@@ -192,6 +190,19 @@ namespace System.IO.MemoryStreamUnitTests
             }
         }
 
-        #endregion Test Cases
+        [TestMethod]
+        public void Read_SpanByte_advances_Position_property()
+        {
+            var data = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
+            var buffer = new byte[4];
+
+
+            using var sut = new MemoryStream(data);
+
+            var bytesRead = sut.Read(buffer);
+
+            Assert.AreEqual(buffer.Length, bytesRead);
+            Assert.AreEqual(4, sut.Position);
+        }
     }
 }
