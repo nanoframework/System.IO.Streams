@@ -103,6 +103,7 @@ jobs:
         System.IO.Ports
         nanoFramework.Logging
         nanoFramework.Json
+        nanoframework/System.Device.UsbClient
 
 ##################################
 # report build failure to Discord
