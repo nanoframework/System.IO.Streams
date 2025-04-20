@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		version.json = version.json
 	EndProjectSection
 EndProject
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "StreamReaderWriterUnitTests", "UnitTests\StreamReaderWriterUnitTests\StreamReaderWriterUnitTests.nfproj", "{D59B18D1-30C7-4B13-9331-1C77043491F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,12 +37,19 @@ Global
 		{ACFDACA6-8C62-412D-B0B9-3059601A3D9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACFDACA6-8C62-412D-B0B9-3059601A3D9C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ACFDACA6-8C62-412D-B0B9-3059601A3D9C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D59B18D1-30C7-4B13-9331-1C77043491F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D59B18D1-30C7-4B13-9331-1C77043491F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D59B18D1-30C7-4B13-9331-1C77043491F8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D59B18D1-30C7-4B13-9331-1C77043491F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D59B18D1-30C7-4B13-9331-1C77043491F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D59B18D1-30C7-4B13-9331-1C77043491F8}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ACFDACA6-8C62-412D-B0B9-3059601A3D9C} = {98AC1D27-BE89-4980-82F1-474339A259E3}
+		{D59B18D1-30C7-4B13-9331-1C77043491F8} = {98AC1D27-BE89-4980-82F1-474339A259E3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AFF41EE6-F960-49D7-94D4-F87BEC8E2F77}

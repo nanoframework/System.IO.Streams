@@ -27,6 +27,7 @@ namespace System.IO
         readonly char[] _singleCharBuff;
 
         private bool _disposed;
+        private readonly bool _closable;
 
         // internal stream read buffer
         private byte[] _buffer;
@@ -59,14 +60,19 @@ namespace System.IO
                 return _curBufLen == _curBufPos;
             }
         }
+        internal bool LeaveOpen
+        {
+            get { return !_closable; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamReader"/> class for the specified stream.
         /// </summary>
         /// <param name="stream">The stream to be read.</param>
+        /// <param name="leaveOpen">Leave stream open after dispose writer.</param>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> does not support reading.</exception>
-        public StreamReader(Stream stream)
+        public StreamReader(Stream stream, bool leaveOpen = false)
         {
             if (stream == null)
             {
@@ -85,7 +91,10 @@ namespace System.IO
             BaseStream = stream;
             _decoder = CurrentEncoding.GetDecoder();
             _disposed = false;
+            _closable = !leaveOpen;
         }
+
+
 
         /// <summary>
         /// Closes the <see cref="StreamReader"/> object and the underlying stream, and releases any system resources associated with the reader.
@@ -114,7 +123,10 @@ namespace System.IO
             {
                 if (disposing)
                 {
-                    BaseStream.Close();
+                    if (!LeaveOpen)
+                    {
+                        BaseStream.Close();
+                    }
                 }
 
                 BaseStream = null;
