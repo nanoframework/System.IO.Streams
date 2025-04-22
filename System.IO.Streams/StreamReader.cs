@@ -66,7 +66,7 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StreamReader"/> class for the specified stream.
+        /// Initializes a new instance of the <see cref="StreamReader"/> class for the specified stream and optionally leaves the stream open.
         /// </summary>
         /// <param name="stream">The stream to be read.</param>
         /// <param name="leaveOpen">Leave stream open after dispose writer.</param>
