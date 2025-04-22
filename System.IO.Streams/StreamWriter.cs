@@ -57,7 +57,7 @@ namespace System.IO
         /// Initializes a new instance of the <see cref="StreamWriter"/> class for the specified stream by using UTF-8 encoding and the default buffer size and optionally leaves the stream open.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
-        /// <param name="leaveOpen">Leave stream open after dispose writer.</param>
+        /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="StreamWriter"/> object is disposed; otherwise, <see langword="false"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> is not writable.</exception>
         public StreamWriter(Stream stream, bool leaveOpen = false)
