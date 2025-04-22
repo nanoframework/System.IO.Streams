@@ -69,7 +69,7 @@ namespace System.IO
         /// Initializes a new instance of the <see cref="StreamReader"/> class for the specified stream and optionally leaves the stream open.
         /// </summary>
         /// <param name="stream">The stream to be read.</param>
-        /// <param name="leaveOpen">Leave stream open after dispose writer.</param>
+                /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="StreamReader"/> object is disposed; otherwise, <see langword="false"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> does not support reading.</exception>
         public StreamReader(Stream stream, bool leaveOpen = false)
