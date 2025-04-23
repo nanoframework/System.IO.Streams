@@ -25,8 +25,10 @@ namespace System.IO.MemoryStreamUnitTests
                 //stream.SetLength(0);
                 using (var streamWriter = new StreamWriter(stream, true))
                 {
-                    streamWriter.WriteLine(TEST_TEXT1);
+                    streamWriter.Write(TEST_TEXT1);
                 }
+                Assert.AreEqual(TEST_TEXT1.Length, (int)stream.Length);
+                Assert.AreEqual(TEST_TEXT1.Length, (int)stream.Position);
 
                 stream.Position = 0;
 

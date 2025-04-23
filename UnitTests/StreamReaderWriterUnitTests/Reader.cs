@@ -16,13 +16,29 @@ namespace System.IO.MemoryStreamUnitTests
         [TestMethod]
         public void LeaveOpen()
         {
-            var TEST_TEXT = "This IS a TEST!";
+            var TEST_TEXT1 = "This IS a TEST!";
+            var TEST_TEXT2 = "This IS a TEST!";
+            var TEST_TEXT = TEST_TEXT1 + TEST_TEXT2;
             using (var stream = new MemoryStream())
             {
                 //stream.SetLength(0);
                 using (var streamWriter = new StreamWriter(stream, true))
                 {
-                    streamWriter.WriteLine(TEST_TEXT);
+                    streamWriter.Write(TEST_TEXT1);
+                }
+                Assert.AreEqual(TEST_TEXT1.Length, (int)stream.Length);
+                Assert.AreEqual(TEST_TEXT1.Length, (int)stream.Position);
+
+                using (var streamWriter = new StreamWriter(stream, true))
+                {
+                    streamWriter.Write(TEST_TEXT2);
+                }
+                Assert.AreEqual(TEST_TEXT.Length, (int)stream.Length);
+                Assert.AreEqual(TEST_TEXT.Length, (int)stream.Position);
+
+                using (var streamWriter = new StreamWriter(stream, true))
+                {
+                    streamWriter.WriteLine();
                 }
 
 
