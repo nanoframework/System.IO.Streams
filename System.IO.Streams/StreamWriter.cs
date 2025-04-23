@@ -20,6 +20,7 @@ namespace System.IO
         private int _curBufPos;
         // must equal TextWriter._InitialNewLine
         private byte[] _newLineBytes = Encoding.UTF8.GetBytes("\r\n");
+        private readonly bool _closable;
 
         /// <summary>
         /// Gets the underlying stream that interfaces with a backing store.
@@ -32,6 +33,11 @@ namespace System.IO
         /// </summary>
         /// <value>The Encoding specified in the constructor for the current instance, or <see cref="UTF8Encoding"/> if an encoding was not specified.</value>
         public override Encoding Encoding => Encoding.UTF8;
+
+        internal bool LeaveOpen
+        {
+            get { return !_closable; }
+        }
 
         /// <inheritdoc/>
         public override string NewLine
@@ -48,12 +54,13 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StreamWriter"/> class for the specified stream by using UTF-8 encoding and the default buffer size.
+        /// Initializes a new instance of the <see cref="StreamWriter"/> class for the specified stream by using UTF-8 encoding and the default buffer size and optionally leaves the stream open.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
+        /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="StreamWriter"/> object is disposed; otherwise, <see langword="false"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> is not writable.</exception>
-        public StreamWriter(Stream stream)
+        public StreamWriter(Stream stream, bool leaveOpen = false)
         {
             if (stream == null)
             {
@@ -69,6 +76,7 @@ namespace System.IO
             _buffer = new byte[c_BufferSize];
             _curBufPos = 0;
             _disposed = false;
+            _closable = !leaveOpen;
         }
 
         /// <summary>
@@ -112,7 +120,10 @@ namespace System.IO
 
                     try
                     {
-                        BaseStream.Close();
+                        if (!LeaveOpen)
+                        {
+                            BaseStream.Close();
+                        }
                     }
                     catch
                     {
