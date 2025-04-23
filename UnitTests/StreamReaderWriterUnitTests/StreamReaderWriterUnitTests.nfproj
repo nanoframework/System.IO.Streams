@@ -48,7 +48,6 @@
     <ProjectReference Include="..\..\System.IO.Streams\System.IO.Streams.nfproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="nano.runsettings" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
