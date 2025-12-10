@@ -1,8 +1,5 @@
-﻿//
-// Copyright (c) .NET Foundation and Contributors
-// Portions Copyright (c) Microsoft Corporation.  All rights reserved.
-// See LICENSE file in the project root for full license information.
-//
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.IO
 {
@@ -195,12 +192,12 @@ namespace System.IO
 
         /// <inheritdoc/>
         /// <exception cref="ObjectDisposedException">The current stream instance is closed.</exception>
-        public override int Read(SpanByte buffer)
+        public override int Read(Span<byte> buffer)
         {
             EnsureOpen();
 
             var bytesToRead = _length - _position;
-            
+
             if (bytesToRead > buffer.Length)
             {
                 bytesToRead = buffer.Length;
@@ -211,10 +208,7 @@ namespace System.IO
                 return 0;
             }
 
-            for(var i = 0; i < bytesToRead; i++)
-            {
-                buffer[i] = _buffer[_position + i];
-            }
+            new Span<byte>(_buffer, _position, bytesToRead).CopyTo(buffer);
 
             _position += bytesToRead;
 

@@ -12,6 +12,6 @@
 	   <Logging>Verbose</Logging>
 	   <IsRealHardware>False</IsRealHardware>
 	   <RunnerExtraArguments></RunnerExtraArguments>
-	   <UsePreviewClr>False</UsePreviewClr>
+	   <UsePreviewClr>True</UsePreviewClr>
    </nanoFrameworkAdapter>
 </RunSettings>

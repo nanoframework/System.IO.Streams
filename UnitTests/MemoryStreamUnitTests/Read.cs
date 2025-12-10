@@ -199,7 +199,7 @@ namespace System.IO.MemoryStreamUnitTests
 
             using var sut = new MemoryStream(data);
 
-            var bytesRead = sut.Read(buffer);
+            var bytesRead = sut.Read(new Span<byte>(buffer));
 
             Assert.AreEqual(buffer.Length, bytesRead);
             Assert.AreEqual(4, sut.Position);

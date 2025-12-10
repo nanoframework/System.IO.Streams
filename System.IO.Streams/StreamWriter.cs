@@ -244,7 +244,7 @@ namespace System.IO
             }
 
             // else add bytes to the internal buffer
-            Array.Copy(buffer, index, _buffer, _curBufPos, count);
+            new Span<byte>(buffer, index, count).CopyTo(new Span<byte>(_buffer, _curBufPos, count));
 
             _curBufPos += count;
 

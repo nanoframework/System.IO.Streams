@@ -1,8 +1,5 @@
-//
-// Copyright (c) .NET Foundation and Contributors
-// Portions Copyright (c) Microsoft Corporation.  All rights reserved.
-// See LICENSE file in the project root for full license information.
-//
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.IO
 {
@@ -238,7 +235,7 @@ namespace System.IO
         /// </summary>
         /// <param name="buffer">A region of memory. When this method returns, the contents of this region are replaced by the bytes read from the current source.</param>
         /// <returns>The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.</returns>
-        public abstract int Read(SpanByte buffer);
+        public abstract int Read(Span<byte> buffer);
 
         /// <summary>
         /// When overridden in a derived class, reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
@@ -258,12 +255,12 @@ namespace System.IO
         /// <returns>The unsigned byte cast to an Int32, or -1 if at the end of the stream.</returns>
         public virtual int ReadByte()
         {
-            var oneByteArray = new byte[1];
-            var r = Read(oneByteArray, 0, 1);
+            Span<byte> oneByteSpan = stackalloc byte[1];
+            var r = Read(oneByteSpan);
 
             if (r == 0) return -1;
 
-            return oneByteArray[0];
+            return oneByteSpan[0];
         }
 
         /// <summary>
@@ -284,8 +281,8 @@ namespace System.IO
         public virtual void WriteByte(byte value)
         {
             var oneByteArray = new byte[1];
-            oneByteArray[0] = value;
+         oneByteArray[0] = value;
             Write(oneByteArray, 0, 1);
-        }
+     }
     }
 }
