@@ -72,8 +72,9 @@ namespace System.IO
         /// <exception cref="ArgumentNullException"><paramref name="buffer"/> is <see langword="null"/>.</exception>
         public MemoryStream(byte[] buffer, bool isWritable)
         {
-            _buffer = buffer ?? throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(buffer);
 
+            _buffer = buffer;
             _length = _capacity = buffer.Length;
             _expandable = false;
             _origin = 0;
@@ -181,7 +182,7 @@ namespace System.IO
             {
                 EnsureOpen();
 
-                if (value < 0 || value > MemStreamMaxLength)
+                if (value is < 0 or > MemStreamMaxLength)
                 {
                     throw new ArgumentOutOfRangeException();
                 }
@@ -196,7 +197,7 @@ namespace System.IO
         {
             EnsureOpen();
 
-            var bytesToRead = _length - _position;
+            int bytesToRead = _length - _position;
 
             if (bytesToRead > buffer.Length)
             {
@@ -209,7 +210,6 @@ namespace System.IO
             }
 
             new Span<byte>(_buffer, _position, bytesToRead).CopyTo(buffer);
-
             _position += bytesToRead;
 
             return bytesToRead;
@@ -384,10 +384,7 @@ namespace System.IO
             EnsureOpen();
             EnsureWritable();
 
-            if (buffer == null)
-            {
-                throw new ArgumentNullException();
-            }
+            ArgumentNullException.ThrowIfNull(buffer);
 
             if (offset < 0 || count < 0)
             {
@@ -399,44 +396,59 @@ namespace System.IO
                 throw new ArgumentException();
             }
 
-            int i = _position + count;
+            int newPosition = _position + count;
 
             // check for overflow
-            if (i > _length)
+            if (newPosition > _length)
             {
-                if (i > _capacity)
+                if (newPosition > _capacity)
                 {
-                    EnsureCapacity(i);
+                    EnsureCapacity(newPosition);
                 }
 
-                _length = i;
+                _length = newPosition;
             }
 
-            Array.Copy(buffer, offset, _buffer, _position, count);
-            _position = i;
+            new Span<byte>(buffer, offset, count).CopyTo(new Span<byte>(_buffer, _position, count));
+            _position = newPosition;
         }
 
-        /// <inheritdoc/>
-        /// <exception cref="ObjectDisposedException"></exception>
+        /// <summary>
+        /// Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+        /// </summary>
+        /// <param name="buffer">A region of memory. This method copies the contents of this region to the current stream.</param>
+        /// <exception cref="ObjectDisposedException">The current stream instance is closed.</exception>
         /// <exception cref="NotSupportedException">The stream buffer does not have the capacity to hold the
         /// data and is not expandable, and/or the stream is not writable.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The MemoryStream max size was exceeded</exception>
-        public override void WriteByte(byte value)
+        /// <exception cref="ArgumentOutOfRangeException">The MemoryStream max size was exceeded.</exception>
+        /// <remarks>
+        /// Use the <see cref="CanWrite"/> property to determine whether the current instance supports writing.
+        /// If the write operation is successful, the position within the stream advances by the number of bytes written.
+        /// If an exception occurs, the position within the stream remains unchanged.
+        /// </remarks>
+        public override void Write(ReadOnlySpan<byte> buffer)
         {
             EnsureOpen();
             EnsureWritable();
 
-            if (_position >= _capacity)
+            int count = buffer.Length;
+            int newPosition = _position + count;
+
+            // check for overflow
+            if (newPosition > _length)
             {
-                EnsureCapacity(_position + 1);
+                if (newPosition > _capacity)
+                {
+                    EnsureCapacity(newPosition);
+                }
+
+                _length = newPosition;
             }
 
-            _buffer[_position++] = value;
+            // Copy ReadOnlySpan to buffer
+            buffer.CopyTo(new Span<byte>(_buffer, _position, count));
 
-            if (_position > _length)
-            {
-                _length = _position;
-            }
+            _position = newPosition;
         }
 
         /// <summary>

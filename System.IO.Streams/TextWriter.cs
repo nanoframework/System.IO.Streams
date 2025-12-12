@@ -1,8 +1,5 @@
-﻿//
-// Copyright (c) .NET Foundation and Contributors
-// Portions Copyright (c) Microsoft Corporation.  All rights reserved.
-// See LICENSE file in the project root for full license information.
-//
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Text;
 
@@ -30,6 +27,15 @@ namespace System.IO
         /// <summary>
         /// Gets or sets the line terminator string used by the current <see cref="TextWriter"/>.
         /// </summary>
+        /// <value>The line terminator string for the current <see cref="TextWriter"/>.</value>
+        /// <remarks>
+        /// <para>
+        /// For non-Unix platforms, the default line terminator string is a carriage return followed by a line feed ('\r\n'). For Unix platforms, it's a line feed ('\n').
+        /// </para>
+        /// <para>
+        /// The line terminator string is written to the text stream whenever one of the <see cref="WriteLine"/> methods is called. In order for text written by the <see cref="TextWriter"/> to be readable by a <see cref="TextReader"/>, only "\n" or "\r\n" should be used as terminator strings. If <see cref="NewLine"/> is set to <see langword="null"/>, the default newline character is used instead.
+        /// </para>
+        /// </remarks>
         public virtual string NewLine
         {
             get
@@ -39,10 +45,7 @@ namespace System.IO
 
             set
             {
-                if (value == null)
-                {
-                    value = _InitialNewLine;
-                }
+                value ??= _InitialNewLine;
 
                 CoreNewLine = value.ToCharArray();
             }
@@ -51,10 +54,7 @@ namespace System.IO
         /// <summary>
         /// Closes the current writer and releases any system resources associated with the writer.
         /// </summary>
-        public virtual void Close()
-        {
-            Dispose();
-        }
+        public virtual void Close() => Dispose();
 
         /// <summary>
         /// Releases the unmanaged resources used by the <see cref="TextWriter"/> and optionally releases the managed resources.
@@ -118,17 +118,9 @@ namespace System.IO
         /// <exception cref="ArgumentException">The <paramref name="buffer"/> length minus <paramref name="index"/> is less than <paramref name="count"/>.</exception>
         public virtual void Write(char[] buffer, int index, int count)
         {
-            if (buffer == null)
-            {
-                throw new ArgumentNullException();
-            }
+            ArgumentNullException.ThrowIfNull(buffer);
 
-            if (index < 0)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            if (count < 0)
+            if (index < 0 || count < 0)
             {
                 throw new ArgumentOutOfRangeException();
             }
@@ -148,65 +140,57 @@ namespace System.IO
         /// Writes the text representation of a <see cref="bool"/> value to the text stream.
         /// </summary>
         /// <param name="value">The <see cref="bool"/> value to write.</param>
-        public virtual void Write(bool value)
-        {
-            Write(value.ToString());
-        }
+        public virtual void Write(bool value) => Write(value.ToString());
 
         /// <summary>
         /// Writes the text representation of a 4-byte signed integer to the text stream.
         /// </summary>
         /// <param name="value">The 4-byte signed integer to write.</param>
-        public virtual void Write(int value)
-        {
-            Write(value.ToString());
-        }
+        public virtual void Write(int value) => Write(value.ToString());
 
         /// <summary>
         /// Writes the text representation of a 4-byte unsigned integer to the text stream.
         /// </summary>
         /// <param name="value">The 4-byte unsigned integer to write.</param>
-        [System.CLSCompliant(false)]
-        public virtual void Write(uint value)
-        {
-            Write(value.ToString());
-        }
+        [CLSCompliant(false)]
+        public virtual void Write(uint value) => Write(value.ToString());
 
         /// <summary>
         /// Writes the text representation of an 8-byte signed integer to the text stream.
         /// </summary>
         /// <param name="value">The 8-byte signed integer to write.</param>
-        public virtual void Write(long value)
-        {
-            Write(value.ToString());
-        }
+        public virtual void Write(long value) => Write(value.ToString());
 
         /// <summary>
         /// Writes the text representation of an 8-byte unsigned integer to the text stream.
         /// </summary>
         /// <param name="value">The 8-byte unsigned integer to write.</param>
-        [System.CLSCompliant(false)]
-        public virtual void Write(ulong value)
-        {
-            Write(value.ToString());
-        }
+        [CLSCompliant(false)]
+        public virtual void Write(ulong value) => Write(value.ToString());
 
         /// <summary>
         /// Writes the text representation of a 4-byte floating-point value to the text stream.
         /// </summary>
         /// <param name="value">The 4-byte floating-point value to write.</param>
-        public virtual void Write(float value)
-        {
-            Write(value.ToString());
-        }
+        public virtual void Write(float value) => Write(value.ToString());
 
         /// <summary>
         /// Writes the text representation of an 8-byte floating-point value to the text stream.
         /// </summary>
         /// <param name="value">The 8-byte floating-point value to write.</param>
-        public virtual void Write(double value)
-        {
-            Write(value.ToString());
+        public virtual void Write(double value) => Write(value.ToString());
+
+        /// <summary>
+        /// Writes a character span to the text stream.
+        /// </summary>
+        /// <param name="buffer">The character span to write to the text stream.</param>
+        /// <remarks>
+        /// This method writes the contents of the <paramref name="buffer"/> span to the text stream.
+        /// The default implementation creates a temporary array from the span and calls <see cref="Write(char[])"/>.
+        /// Derived classes can override this method to provide a more efficient implementation.
+        /// </remarks>
+        public virtual void Write(ReadOnlySpan<char> buffer)
+        { 
         }
 
         /// <summary>
@@ -236,10 +220,7 @@ namespace System.IO
         /// <summary>
         /// Writes a line terminator to the text stream.
         /// </summary>
-        public virtual void WriteLine()
-        {
-            Write(CoreNewLine);
-        }
+        public virtual void WriteLine() => Write(CoreNewLine);
 
         /// <summary>
         /// Writes a character to the text stream, followed by a line terminator.
@@ -300,7 +281,7 @@ namespace System.IO
         /// Writes the text representation of a 4-byte unsigned integer to the text stream, followed by a line terminator.
         /// </summary>
         /// <param name="value">The 4-byte unsigned integer to write.</param>
-        [System.CLSCompliant(false)]
+        [CLSCompliant(false)]
         public virtual void WriteLine(uint value)
         {
             Write(value);
@@ -321,7 +302,7 @@ namespace System.IO
         /// Writes the text representation of an 8-byte unsigned integer to the text stream, followed by a line terminator.
         /// </summary>
         /// <param name="value">The 8-byte unsigned integer to write.</param>
-        [System.CLSCompliant(false)]
+        [CLSCompliant(false)]
         public virtual void WriteLine(ulong value)
         {
             Write(value);

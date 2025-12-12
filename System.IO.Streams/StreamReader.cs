@@ -1,8 +1,5 @@
-﻿//
-// Copyright (c) .NET Foundation and Contributors
-// Portions Copyright (c) Microsoft Corporation.  All rights reserved.
-// See LICENSE file in the project root for full license information.
-//
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
 using System.Text;
@@ -39,7 +36,12 @@ namespace System.IO
         /// </summary>
         /// <value>The underlying stream.</value>
         /// <remarks>
-        /// You use this property to access the underlying stream. The StreamReader class buffers input from the underlying stream when you call one of the Read methods. If you manipulate the position of the underlying stream after reading data into the buffer, the position of the underlying stream might not match the position of the internal buffer. To reset the internal buffer, call the DiscardBufferedData method; however, this method slows performance and should be called only when absolutely necessary. The StreamReader constructors that have the detectEncodingFromByteOrderMarks parameter can change the encoding the first time you read from the StreamReader object.
+        /// <para>
+        /// You use this property to access the underlying stream. The <see cref="StreamReader"/> class buffers input from the underlying stream when you call one of the Read methods.
+        /// </para>
+        /// <para>
+        /// If you manipulate the position of the underlying stream after reading data into the buffer, the position of the underlying stream might not match the position of the internal buffer. To reset the internal buffer, call the DiscardBufferedData method; however, this method slows performance and should be called only when absolutely necessary.
+        /// </para>
         /// </remarks>
         public virtual Stream BaseStream { get; private set; }
 
@@ -47,37 +49,26 @@ namespace System.IO
         /// Gets the current character encoding that the current <see cref="StreamReader"/> object is using.
         /// </summary>
         /// <value>The current character encoding used by the current reader. The value can be different after the first call to any <see cref="Read()"/> method of <see cref="StreamReader"/>, since encoding autodetection is not done until the first call to a <see cref="Read()"/> method.</value>
-        public virtual Encoding CurrentEncoding => System.Text.Encoding.UTF8;
+        public virtual Encoding CurrentEncoding => Encoding.UTF8;
 
         /// <summary>
         /// Gets a value that indicates whether the current stream position is at the end of the stream.
         /// </summary>
         /// <value><see langword="true"/> if the current stream position is at the end of the stream; otherwise <see langword="false"/>.</value>
-        public bool EndOfStream
-        {
-            get
-            {
-                return _curBufLen == _curBufPos;
-            }
-        }
-        internal bool LeaveOpen
-        {
-            get { return !_closable; }
-        }
+        public bool EndOfStream => _curBufLen == _curBufPos;
+
+        internal bool LeaveOpen => !_closable;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamReader"/> class for the specified stream and optionally leaves the stream open.
         /// </summary>
         /// <param name="stream">The stream to be read.</param>
-                /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="StreamReader"/> object is disposed; otherwise, <see langword="false"/>.</param>
+        /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="StreamReader"/> object is disposed; otherwise, <see langword="false"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="stream"/> does not support reading.</exception>
         public StreamReader(Stream stream, bool leaveOpen = false)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException();
-            }
+            ArgumentNullException.ThrowIfNull(stream);
 
             if (!stream.CanRead)
             {
@@ -115,7 +106,7 @@ namespace System.IO
         /// <param name="disposing"><see langword="true"/> to release both managed and unmanaged resources; <see langword="false"/> to release only unmanaged resources.</param>
         /// <remarks>
         /// This method is called by the public <see cref="Dispose"/> method and the Finalize method. Dispose invokes the protected <see cref="Dispose"/> method with the disposing parameter set to <see langword="true"/>. Finalize invokes <see cref="Dispose"/> with disposing set to <see langword="false"/>.
-        /// When the disposing parameter is <see langword="true"/>, this method releases all resources held by any managed objects that the StreamReader object references.This method invokes the <see cref="Dispose"/> method of each referenced object.
+        /// When the disposing parameter is <see langword="true"/>, this method releases all resources held by any managed objects that the <see cref="StreamReader"/> object references. This method invokes the <see cref="Dispose"/> method of each referenced object.
         /// </remarks>
         protected override void Dispose(bool disposing)
         {
@@ -172,7 +163,7 @@ namespace System.IO
                     // retry read until response timeout expires
                     while (BaseStream.Length > 0 && totRead < _buffer.Length)
                     {
-                        int len = (int)(_buffer.Length - totRead);
+                        int len = _buffer.Length - totRead;
 
                         if (len > BaseStream.Length)
                         {
@@ -212,12 +203,15 @@ namespace System.IO
         /// </summary>
         /// <returns>The next character from the input stream represented as an <see cref="int"/> object, or -1 if no more characters are available.</returns>
         /// <remarks>
+        /// <para>
         /// This method overrides <see cref="TextReader.Read()"/>.
-        /// This method returns an integer so that it can return -1 if the end of the stream has been reached. If you manipulate the position of the underlying stream after reading data into the buffer, the position of the underlying stream might not match the position of the internal buffer.To reset the internal buffer, call the DiscardBufferedData method; however, this method slows performance and should be called only when absolutely necessary.
+        /// </para>
+        /// <para>
+        /// This method returns an integer so that it can return -1 if the end of the stream has been reached. If you manipulate the position of the underlying stream after reading data into the buffer, the position of the underlying stream might not match the position of the internal buffer. To reset the internal buffer, call the DiscardBufferedData method; however, this method slows performance and should be called only when absolutely necessary.
+        /// </para>
         /// </remarks>
         public override int Read()
         {
-            int byteUsed;
 
             while (true)
             {
@@ -229,7 +223,7 @@ namespace System.IO
                     0,
                     1,
                     false,
-                    out byteUsed,
+                    out int byteUsed,
                     out System.Int32 charUsed,
                     out _);
 
@@ -278,29 +272,29 @@ namespace System.IO
         /// <exception cref="ArgumentNullException"><paramref name="buffer"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> or <paramref name="count"/> is negative.</exception>
         /// <exception cref="ArgumentException">The buffer length minus <paramref name="index"/> is less than <paramref name="count"/>.</exception>
-        /// <exception cref="ObjectDisposedException">An I/O error occurs, such as the stream is closed.</exception>
+        /// <exception cref="ObjectDisposedException">The stream is closed.</exception>
         /// <remarks>
-        /// This method overrides TextReader.Read.
+        /// <para>
+        /// This method overrides <see cref="TextReader.Read(char[], int, int)"/>.
+        /// </para>
+        /// <para>
         /// This method returns an integer so that it can return 0 if the end of the stream has been reached.
-        /// When using the Read method, it is more efficient to use a buffer that is the same size as the internal buffer of the stream, where the internal buffer is set to your desired block size, and to always read less than the block size.If the size of the internal buffer was unspecified when the stream was constructed, its default size is 4 kilobytes(4096 bytes). If you manipulate the position of the underlying stream after reading data into the buffer, the position of the underlying stream might not match the position of the internal buffer.To reset the internal buffer, call the DiscardBufferedData method; however, this method slows performance and should be called only when absolutely necessary.
-        /// This method returns after either the number of characters specified by the count parameter are read, or the end of the file is reached. <see cref="TextReader.ReadBlock(char[], int, int)"/> is a blocking version of <see cref="Read(char[], int, int)"/>.
+        /// </para>
+        /// <para>
+        /// When using the Read method, it is more efficient to use a buffer that is the same size as the internal buffer of the stream, where the internal buffer is set to your desired block size, and to always read less than the block size. If the size of the internal buffer was unspecified when the stream was constructed, its default size is 4 kilobytes (4096 bytes). If you manipulate the position of the underlying stream after reading data into the buffer, the position of the underlying stream might not match the position of the internal buffer. To reset the internal buffer, call the DiscardBufferedData method; however, this method slows performance and should be called only when absolutely necessary.
+        /// </para>
+        /// <para>
+        /// This method returns after either the number of characters specified by the <paramref name="count"/> parameter are read, or the end of the file is reached. <see cref="TextReader.ReadBlock(char[], int, int)"/> is a blocking version of <see cref="Read(char[], int, int)"/>.
+        /// </para>
         /// </remarks>
         public override int Read(
             char[] buffer,
             int index,
             int count)
         {
-            if (buffer == null)
-            {
-                throw new ArgumentNullException();
-            }
+            ArgumentNullException.ThrowIfNull(buffer);
 
-            if (index < 0)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            if (count < 0)
+            if (index < 0 || count < 0)
             {
                 throw new ArgumentOutOfRangeException();
             }
@@ -315,47 +309,48 @@ namespace System.IO
                 throw new ObjectDisposedException();
             }
 
-            int byteUsed, charUsed = 0;
+            return ReadHelper(new Span<char>(buffer, index, count));
+        }
 
-            if (_curBufLen == 0)
+        /// <summary>
+        /// Reads a specified maximum number of characters from the current stream into a character span.
+        /// </summary>
+        /// <param name="buffer">When this method returns, contains the characters read from the current source. If the total number of characters read is zero, the span remains unmodified.</param>
+        /// <returns>
+        /// The number of characters that have been read, or 0 if at the end of the stream and no data was read. The number will be less than or equal to the <paramref name="buffer"/> length, depending on whether the data is available within the stream.
+        /// </returns>
+        /// <exception cref="ObjectDisposedException">The stream is closed.</exception>
+        /// <remarks>
+        /// <para>
+        /// This method reads at most <paramref name="buffer"/>.Length characters from the current stream and stores them in <paramref name="buffer"/>.
+        /// </para>
+        /// <para>
+        /// This method returns an integer so that it can return 0 if the end of the stream has been reached.
+        /// </para>
+        /// </remarks>
+        public override int Read(Span<char> buffer)
+        {
+            if (_disposed)
             {
-                _ = FillBufferAndReset(count);
+                throw new ObjectDisposedException();
             }
 
-            int offset = 0;
-
-            while (true)
-            {
-                _decoder.Convert(
-                    _buffer,
-                    _curBufPos,
-                    _curBufLen - _curBufPos,
-                    buffer,
-                    offset,
-                    count,
-                    false,
-                    out byteUsed,
-                    out charUsed,
-                    out _);
-
-                count -= charUsed;
-                _curBufPos += byteUsed;
-                offset += charUsed;
-
-                if (count == 0 || (FillBufferAndReset(count) == 0))
-                {
-                    break;
-                }
-            }
-
-            return charUsed;
+            return ReadHelper(buffer);
         }
 
         /// <summary>
         /// Reads a line of characters from the current stream and returns the data as a string.
         /// </summary>
         /// <returns>The next line from the input stream, or <see langword="null"/> if the end of the input stream is reached.</returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="OutOfMemoryException">There is insufficient memory to allocate a buffer for the returned string.</exception>
+        /// <remarks>
+        /// <para>
+        /// A line is defined as a sequence of characters followed by a carriage return (\r), a line feed (\n), or a carriage return immediately followed by a line feed (\r\n). The string that is returned does not contain the terminating carriage return or line feed.
+        /// </para>
+        /// <para>
+        /// This method overrides <see cref="TextReader.ReadLine"/>.
+        /// </para>
+        /// </remarks>
         public override string ReadLine()
         {
             int bufLen = c_BufferSize;
@@ -421,15 +416,25 @@ namespace System.IO
         /// </summary>
         /// <returns>The rest of the stream as a string, from the current position to the end. If the current position is at the end of the stream, returns an empty string ("").</returns>
         /// <remarks>
-        /// This method overrides TextReader.ReadToEnd.
-        /// ReadToEnd works best when you need to read all the input from the current position to the end of the stream.If more control is needed over how many characters are read from the stream, use the Read(Char[], Int32, Int32) method overload, which generally results in better performance.
-        /// ReadToEnd assumes that the stream knows when it has reached an end.For interactive protocols in which the server sends data only when you ask for it and does not close the connection, ReadToEnd might block indefinitely because it does not reach an end, and should be avoided.
-        /// Note that when using the Read method, it is more efficient to use a buffer that is the same size as the internal buffer of the stream.If the size of the buffer was unspecified when the stream was constructed, its default size is 4 kilobytes (4096 bytes).
-        /// If the current method throws an OutOfMemoryException, the reader's position in the underlying Stream object is advanced by the number of characters the method was able to read, but the characters already read into the internal ReadLine buffer are discarded. If you manipulate the position of the underlying stream after reading data into the buffer, the position of the underlying stream might not match the position of the internal buffer. To reset the internal buffer, call the DiscardBufferedData method; however, this method slows performance and should be called only when absolutely necessary.
+        /// <para>
+        /// This method overrides <see cref="TextReader.ReadToEnd"/>.
+        /// </para>
+        /// <para>
+        /// ReadToEnd works best when you need to read all the input from the current position to the end of the stream. If more control is needed over how many characters are read from the stream, use the <see cref="Read(char[], int, int)"/> method overload, which generally results in better performance.
+        /// </para>
+        /// <para>
+        /// ReadToEnd assumes that the stream knows when it has reached an end. For interactive protocols in which the server sends data only when you ask for it and does not close the connection, ReadToEnd might block indefinitely because it does not reach an end, and should be avoided.
+        /// </para>
+        /// <para>
+        /// Note that when using the Read method, it is more efficient to use a buffer that is the same size as the internal buffer of the stream. If the size of the buffer was unspecified when the stream was constructed, its default size is 4 kilobytes (4096 bytes).
+        /// </para>
+        /// <para>
+        /// If the current method throws an <see cref="OutOfMemoryException"/>, the reader's position in the underlying <see cref="Stream"/> object is advanced by the number of characters the method was able to read, but the characters already read into the internal ReadLine buffer are discarded. If you manipulate the position of the underlying stream after reading data into the buffer, the position of the underlying stream might not match the position of the internal buffer. To reset the internal buffer, call the DiscardBufferedData method; however, this method slows performance and should be called only when absolutely necessary.
+        /// </para>
         /// </remarks>
         public override string ReadToEnd()
         {
-            char[] result = null;
+            char[] result;
 
             if (BaseStream.CanSeek)
             {
@@ -445,9 +450,22 @@ namespace System.IO
 
         private char[] ReadSeekableStream()
         {
-            char[] chars = new char[(int)BaseStream.Length];
+            // remaining bytes from current position to end of stream
+            int remainingBytes = (int)(BaseStream.Length - BaseStream.Position);
+            
+            // estimation of char count (may be less if multi-byte encoding)
+            // we'll allocate enough space and resize if needed
+            char[] chars = new char[remainingBytes];
 
-            _ = Read(chars, 0, chars.Length);
+            int charsRead = Read(chars, 0, chars.Length);
+            
+            // if we read fewer chars than allocated (due to multi-byte encoding), create a properly sized array
+            if (charsRead < chars.Length)
+            {
+                char[] result = new char[charsRead];
+                Array.Copy(chars, 0, result, 0, charsRead);
+                return result;
+            }
 
             return chars;
         }
@@ -470,9 +488,11 @@ namespace System.IO
 
                 totalRead += read;
 
-                if (read < c_BufferSize) // we are done
+                // we are done
+                if (read < c_BufferSize)
                 {
-                    if (read > 0) // copy last scraps
+                    // copy last scraps
+                    if (read > 0)
                     {
                         char[] newChars = new char[read];
 
@@ -497,6 +517,7 @@ namespace System.IO
                 char[] text = new char[totalRead];
 
                 int len = 0;
+
                 for (int i = 0; i < buffers.Count; ++i)
                 {
                     char[] buffer = (char[])buffers[i];
@@ -516,7 +537,10 @@ namespace System.IO
 
         private int FillBufferAndReset(int count)
         {
-            if (_curBufPos != 0) Reset();
+            if (_curBufPos != 0)
+            {
+                Reset();
+            }
 
             int totalRead = 0;
 
@@ -526,7 +550,10 @@ namespace System.IO
                 {
                     int spaceLeft = _buffer.Length - _curBufLen;
 
-                    if (count > spaceLeft) count = spaceLeft;
+                    if (count > spaceLeft)
+                    {
+                        count = spaceLeft;
+                    }
 
                     int read = BaseStream.Read(_buffer, _curBufLen, count);
 
@@ -546,12 +573,69 @@ namespace System.IO
             return totalRead;
         }
 
+        private int ReadHelper(Span<char> buffer)
+        {
+            int count = buffer.Length;
+
+            if (_curBufLen == 0)
+            {
+                _ = FillBufferAndReset(count);
+            }
+
+            int offset = 0;
+            int totalCharsRead = 0;
+
+            // Use temporary array for decoder since Decoder.Convert doesn't have a Span overload
+            char[] tempBuffer = new char[count];
+
+            while (true)
+            {
+                _decoder.Convert(
+                    _buffer,
+                    _curBufPos,
+                    _curBufLen - _curBufPos,
+                    tempBuffer,
+                    0,
+                    count,
+                    false,
+                    out int byteUsed,
+                    out int charUsed,
+                    out _);
+
+                // Copy decoded characters to the span
+                if (charUsed > 0)
+                {
+                    new Span<char>(
+                        tempBuffer,
+                        0,
+                        charUsed).CopyTo(buffer.Slice(offset, charUsed));
+                }
+
+                count -= charUsed;
+                _curBufPos += byteUsed;
+                offset += charUsed;
+                totalCharsRead += charUsed;
+
+                if (count == 0 || (FillBufferAndReset(count) == 0))
+                {
+                    break;
+                }
+            }
+
+            return totalCharsRead;
+        }
+
         private void Reset()
         {
             int bytesAvailable = _curBufLen - _curBufPos;
 
             // here we trust that the copy in place doe not overwrites data
-            Array.Copy(_buffer, _curBufPos, _buffer, 0, bytesAvailable);
+            Array.Copy(
+                _buffer,
+                _curBufPos,
+                _buffer,
+                0,
+                bytesAvailable);
 
             _curBufPos = 0;
             _curBufLen = bytesAvailable;

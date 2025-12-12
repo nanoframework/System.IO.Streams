@@ -1,8 +1,5 @@
-﻿//
-// Copyright (c) .NET Foundation and Contributors
-// Portions Copyright (c) Microsoft Corporation.  All rights reserved.
-// See LICENSE file in the project root for full license information.
-//
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Text;
 
@@ -49,7 +46,7 @@ namespace System.IO
             set
             {
                 base.NewLine = value;
-                _newLineBytes = this.Encoding.GetBytes(value);
+                _newLineBytes = Encoding.GetBytes(value);
             }
         }
 
@@ -62,10 +59,7 @@ namespace System.IO
         /// <exception cref="ArgumentException"><paramref name="stream"/> is not writable.</exception>
         public StreamWriter(Stream stream, bool leaveOpen = false)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException();
-            }
+            ArgumentNullException.ThrowIfNull(stream);
 
             if (!stream.CanWrite)
             {
@@ -83,9 +77,9 @@ namespace System.IO
         /// Closes the current <see cref="StreamWriter"/> object and the underlying stream.
         /// </summary>
         /// <remarks>
-        /// This method overrides <see cref="Stream.Close"/>.
+        /// This method overrides <see cref="TextWriter.Close"/>.
         /// This implementation of <see cref="Close"/> calls the <see cref="Dispose"/> method passing a true value.
-        /// You must call <see cref="Close"/> to ensure that all data is correctly written out to the underlying stream.Following a call to <see cref="Close"/>, any operations on the <see cref="StreamWriter"/> might raise exceptions. If there is insufficient space on the disk, calling <see cref="Close"/> will raise an exception.
+        /// You must call <see cref="Close"/> to ensure that all data is correctly written out to the underlying stream. Following a call to <see cref="Close"/>, any operations on the <see cref="StreamWriter"/> might raise exceptions. If there is insufficient space on the disk, calling <see cref="Close"/> will raise an exception.
         /// Flushing the stream will not flush its underlying encoder unless you explicitly call <see cref="Flush"/> or <see cref="Close"/>.
         /// </remarks>
         public override void Close()
@@ -94,11 +88,11 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Causes any buffered data to be written to the underlying stream, releases the unmanaged resources used by the StreamWriter, and optionally the managed resources.
+        /// Causes any buffered data to be written to the underlying stream, releases the unmanaged resources used by the <see cref="StreamWriter"/>, and optionally the managed resources.
         /// </summary>
         /// <param name="disposing"><see langword="true"/> to release both managed and unmanaged resources; <see langword="false"/> to release only unmanaged resources.</param>
         /// <remarks>
-        /// When the disposing parameter is <see langword="true"/>, this method releases all resources held by any managed objects that this StreamWriter references. This method invokes the <see cref="Dispose"/> method of each referenced object.
+        /// When the disposing parameter is <see langword="true"/>, this method releases all resources held by any managed objects that this <see cref="StreamWriter"/> references. This method invokes the <see cref="Dispose"/> method of each referenced object.
         /// </remarks>
         protected override void Dispose(bool disposing)
         {
@@ -145,8 +139,8 @@ namespace System.IO
         /// <exception cref="ObjectDisposedException">The current writer is closed.</exception>
         /// <exception cref="IOException">An I/O error has occurred.</exception>
         /// <remarks>
-        /// This method overrides TextWriter.Flush.
-        /// Flushing the stream will not flush its underlying encoder unless you explicitly call Flush or <see cref="Close"/>.
+        /// This method overrides <see cref="TextWriter.Flush"/>.
+        /// Flushing the stream will not flush its underlying encoder unless you explicitly call <see cref="Flush"/> or <see cref="Close"/>.
         /// </remarks>
         public override void Flush()
         {
@@ -173,7 +167,7 @@ namespace System.IO
         /// <summary>
         /// Writes a character to the stream.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">The character to write to the stream.</param>
         /// <remarks>
         /// This method overrides <see cref="TextWriter.Write(char)"/>.
         /// The specified character is written to the underlying stream unless the end of the stream is reached prematurely.
@@ -185,10 +179,27 @@ namespace System.IO
             WriteBytes(buffer, 0, buffer.Length);
         }
 
+        /// <summary>
+        /// Writes a character span to the stream.
+        /// </summary>
+        /// <param name="buffer">The character span to write.</param>
+        public override void Write(ReadOnlySpan<char> buffer)
+        {
+            byte[] tempBuf = Encoding.GetBytes(new string(buffer.ToArray()));
+
+            WriteBytes(tempBuf, 0, tempBuf.Length);
+        }
+
         /// <inheritdoc/>
         public override void Write(string value)
         {
+            if (value == null)
+            {
+                return;
+            }
+
             byte[] tempBuf = Encoding.GetBytes(value);
+
             WriteBytes(tempBuf, 0, tempBuf.Length);
         }
 
@@ -201,10 +212,11 @@ namespace System.IO
         /// <summary>
         /// Writes a string to the stream, followed by a line terminator.
         /// </summary>
+        /// <param name="value">The string to write. If the value is <see langword="null"/>, only the line terminator is written.</param>
         /// <remarks>
-        /// This overload is equivalent to the <see cref="TextWriter.Write(string)"/> overload.
-        /// The line terminator is defined by the CoreNewLine field.
-        /// This method does not search the specified string for individual newline characters(hexadecimal 0x000a) and replace them with NewLine.
+        /// This method overrides <see cref="TextWriter.WriteLine(string)"/>.
+        /// The line terminator is defined by the <see cref="NewLine"/> property.
+        /// This method does not search the specified string for individual newline characters (hexadecimal 0x000a) and replace them with <see cref="NewLine"/>.
         /// </remarks>
         public override void WriteLine(string value)
         {
@@ -252,5 +264,3 @@ namespace System.IO
         }
     }
 }
-
-
