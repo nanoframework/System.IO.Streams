@@ -18,8 +18,8 @@
     <description>This package includes the System.IO.Streams assembly for .NET nanoFramework C# projects.</description>
     <tags>nanoFramework C# csharp netmf netnf </tags>
     <dependencies>
-      <dependency id="nanoFramework.CoreLibrary" version="2.0.0-preview.30" />
-      <dependency id="nanoFramework.System.Text" version="2.0.0-preview.3" />
+      <dependency id="nanoFramework.CoreLibrary" version="2.0.0-preview.32" />
+      <dependency id="nanoFramework.System.Text" version="2.0.0-preview.5" />
     </dependencies>
   </metadata>
   <files>
